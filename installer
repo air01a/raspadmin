@@ -1,0 +1,76 @@
+#!/bin/bash
+#############################################################
+# Const Vars
+#############################################################
+DEFAULTINSTALLDIR="/opt/raspadmin"
+DEFAULTPORT="443"
+CONFIGDIR="/etc/raspadmin"
+
+#############################################################
+# Functions
+#############################################################
+function ask_question {
+    message=$1
+    has_constraints=0
+    if [ "$2" !=  "" ] ; then
+        constraints=$2
+        has_constraints=1
+    fi
+    not_valid=1
+    while [ $not_valid -ne 0 ] ; do
+        echo -n  $message
+        read var
+        not_valid=0
+        if [ $has_constraints -ne 0 ]; then
+            not_valid=1
+            for i in $(echo $constraints | sed -e "s/;/ /g"); do
+                if [ "$var" == "$i" ]; then
+                    ask_question=$var
+                    return
+                fi
+            done
+        fi
+    done
+    ask_question=$var
+}
+
+function get_boolean_value {
+    mess=$(expr substr $1 1 1)
+    if [ "$mess" == "y" ] || [ "$mess" == "Y" ] ; then
+        echo -n "1"
+    else
+        echo -n "0"
+    fi
+}
+
+
+#############################################################
+# Asking question
+#############################################################
+clear
+echo "---------------------------------------------"
+echo "Welcome to raspadmin installer"
+echo "---------------------------------------------"
+echo ""
+echo " Configuration        : In progress"
+echo " Copying files        : Waiting"
+echo ""
+echo "Please answer few questions for the installation process"
+echo ""
+echo "----- Directory configuration"
+echo ""
+
+
+
+
+NO_CONSTRAINTS="y;Y;n;N;No;NO;no;yes;Yes;YEs;YES"
+
+ask_question "Please enter the default home directory for user [ $DEFAULTINSTALLDIR ] : "
+installdirectory=$ask_question
+
+if [ "$installdirectory" == "" ] ; then
+    installdirectory=$DEFAULTINSTALLDIR
+fi
+
+echo ""
+echo $installdirectory

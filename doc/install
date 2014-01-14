@@ -1,0 +1,16 @@
+Install dependencies
+--------------------
+Python utils:
+    apt-get install python-pip
+
+Template lib:
+    pip install quik
+pip install netifaces
+
+3. Download the latest psutil source code
+
+https://code.google.com/p/psutil/
+
+ apt-get install python-dev
+ python setup.py build
+ python setup.py install

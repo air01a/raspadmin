@@ -1,0 +1,151 @@
+body {
+        background: #333;
+        margin:0;
+        padding:0;
+        font-family: Verdana, Geneva, sans-serif;
+        font-size: 13px;
+        color: #666;
+}
+
+* {
+        margin:0;
+        padding:0;
+}
+blockquote {
+        border-left: 5px solid #222;
+}
+
+blockquote p {
+        font-style: italic;
+        font-family: Georgia, "Times New Roman", Times, serif;
+        margin: 0;
+        color: #333;
+        height: 1%;
+}
+
+p {
+        line-height: 1.9em;
+        margin-bottom: 20px;
+        font-size: 12px;
+}
+
+a {
+        color: #000;
+fieldset {
+        display: block;
+        border: none;
+        border-top: 1px solid #ccc;
+}
+
+fieldset legend {
+        font-weight: bold;
+        font-size: 13px;
+        padding-right: 10px;
+        color: #333;
+}
+
+fieldset form {
+        padding-top: 15px;
+}
+
+fieldset p label {
+        float: left;
+        width: 150px;
+}
+
+form input, form select, form textarea {
+        padding: 5px;
+        color: #333333;
+        border: 1px solid #ddd;
+        border-right:1px solid #ccc;
+        border-bottom:1px solid #ccc;
+        background-color:#fff;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 13px;
+}
+form input, form select, form textarea {
+        padding: 5px;
+        color: #333333;
+        border: 1px solid #ddd;
+        border-right:1px solid #ccc;
+        border-bottom:1px solid #ccc;
+        background-color:#fff;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 13px;
+}
+
+form input.formbutton {
+        border: none;
+        background: #3B7932;
+        color: #ffffff;
+        font-weight: bold;
+        padding: 6px 10px;
+        font-size: 12px;
+        font-family: Tahoma, Geneva, sans-serif;
+        letter-spacing: 1px;
+        width: auto;
+        overflow: visible;
+}
+
+form.searchform p {
+        margin: 5px 0;
+}
+
+
+span.required {
+        color: #ff0000;
+}
+
+h1 {
+        color: #000;
+        font-size: 35px;
+        font-family: Arial, Helvetica, sans-serif;
+}
+h2 {
+        color: #000;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 27px;
+        letter-spacing: 0px;
+        font-weight: normal;
+        padding: 0 0 5px;
+        margin: 0;
+}
+
+h3 {
+        color: #888;
+        font-size: 24px;
+        font-weight: normal;
+        margin-bottom: 10px;
+        letter-spacing: -1px;
+        font-family: Arial, Helvetica, sans-serif;
+}
+#container {
+        width: 960px;
+        margin: 50px auto;
+        padding: 10px;
+        background-color: #fff;
+}
+
+
+#authentication {
+
+        margin: auto;
+        width: 500px;
+        padding: 20px;
+        background: #f0f0f0;
+        overflow:auto;
+
+        border: 1px solid #cccccc;
+        -moz-border-radius: 7px;
+        -webkit-border-radius: 7px;
+        border-radius: 7px;
+
+        -moz-box-shadow: 2px 2px 2px #cccccc;
+        -webkit-box-shadow: 2px 2px 2px #cccccc;
+        box-shadow: 2px 2px 2px #cccccc;
+
+        top: 20%; /* top = 50% pour centrage vertical */
+        background-image:url(/static/images/raspberry-pi-600x300.png);
+}
+
+
