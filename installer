@@ -122,4 +122,30 @@ if [ $installdir == "" ] ; then
 	sed -e "s#\$PORT#$port#" -e "s#\$INSTALLDIR#$installdir#" -e "s#\$CERT#$certificate_path#" -e "s#\$KEY#$key_path#" -e "s#\$SSL#$ssl#"  conf/raspadmin.conf > $CONFIGDIR/raspadmin.conf
 
 fi
+
+clear
+echo "---------------------------------------------"
+echo "Welcome to raspadmin installer"
+echo "---------------------------------------------"
+echo ""
+echo " Checking requirements : Done
+echo " Configuration         : Done"
+echo " Copying files         : In progress"
+echo ""
+echo "----- Directory creation"
+echo ""
+
+mkdir /var/log/raspadmin
+
+echo ""
+echo "----- File copy"
+echo ""
+[[ ! -f $installdir ]] && mkdir $installdir
+cp -R sources/* $installdir
+
+echo "----- Right management"
+chown -R root:root $installdir
+chmod -R 770 $installdir
+chmod +x /etc/init.d/raspadmin
+chmod 770 /var/log/raspadmin
 echo ""
