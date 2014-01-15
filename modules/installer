@@ -1,0 +1,106 @@
+#!/bin/bash
+#############################################################
+# Const Vars
+#############################################################
+DEFAULTINSTALLDIR="/opt/raspadmin"
+DEFAULTPORT="443"
+CONFIGDIR="/etc/raspadmin"
+
+#############################################################
+# Functions
+#############################################################
+function ask_question {
+    message=$1
+    has_constraints=0
+    if [ "$2" !=  "" ] ; then
+        constraints=$2
+        has_constraints=1
+    fi
+    not_valid=1
+    while [ $not_valid -ne 0 ] ; do
+        echo -n  $message
+        read var
+        not_valid=0
+        if [ $has_constraints -ne 0 ]; then
+            not_valid=1
+            for i in $(echo $constraints | sed -e "s/;/ /g"); do
+                if [ "$var" == "$i" ]; then
+                    ask_question=$var
+                    return
+                fi
+            done
+        fi
+    done
+    ask_question=$var
+}
+
+function get_boolean_value {
+    mess=$(expr substr $1 1 1)
+    if [ "$mess" == "y" ] || [ "$mess" == "Y" ] ; then
+        echo -n "1"
+    else
+        echo -n "0"
+    fi
+}
+
+function read_ini_file {
+    inifile=$1
+    pattern=$2
+    [[ ! -f $inifile ]] && return 
+    result=$(grep $pattern $inifile | cut -d'=' -f2)
+    echo $result
+}
+
+#############################################################
+# Asking question
+#############################################################
+clear
+echo "---------------------------------------------"
+echo "Welcome to raspadmin module installer"
+echo "---------------------------------------------"
+echo ""
+echo "----- Module selection"
+echo ""
+
+NO_CONSTRAINTS="y;Y;n;N;No;NO;no;yes;Yes;YEs;YES"
+
+if [ ! -f /etc/raspadmin/raspadmin.conf ] ; then
+	echo "### Error : configuration file not found ###"
+	exit 1
+fi
+
+installdir=$(read_ini_file "/etc/raspadmin/raspadmin.conf" "staticfiledir" | sed -e "s/static//g")
+templatesdir=$(read_ini_file "/etc/raspadmin/raspadmin.conf" "templatesdir" )
+moduledir=$(read_ini_file "/etc/raspadmin/raspadmin.conf" "moduledir" )
+
+module=""
+for rep in $(ls) ; do
+	if [ -d $rep ] ; then
+		ask_question "Would you like to install module $rep [y/n] : " $NO_CONSTRAINTS
+		result=$(get_boolean_value $ask_question)
+		if [ "$result" == "1" ] ; then
+			module="$module $rep"
+		fi
+	fi
+done
+
+for mod in $module; do
+	echo "--- Installing module $mod"
+	cd $mod/conf
+	cp -Rf * /etc/raspadmin
+	cd ../sources
+	mkdir $moduledir/$mod
+	cp -Rf * $moduledir/$mod
+	cd ../templates
+	cp -Rf * $templatesdir
+	cd ../../
+	echo "Done ---"
+done
+
+echo "-------------------------------------"
+echo "-    Installation is finished       -"
+echo "-------------------------------------"
+
+echo "Please visite the following wiki page to see how to configure module"
+echo "https://github.com/air01a/raspadmin/wiki/Module"
+

@@ -51,7 +51,8 @@ function read_ini_file {
     echo $result
 }
 
-dpkg -s python-pip
+
+
 #############################################################
 # Asking question
 #############################################################
@@ -60,7 +61,45 @@ echo "---------------------------------------------"
 echo "Welcome to raspadmin installer"
 echo "---------------------------------------------"
 echo ""
-echo " Checking requirements : Done
+echo " Checking requirements : In progress"
+echo " Configuration         : Waiting"
+echo " Copying files         : Waiting"
+echo ""
+echo ""
+echo "----- Directory configuration"
+echo ""
+
+dpkg -s python-pip > /dev/null 2>&1
+pip=$?
+
+dpkg -s python-dev > /dev/null 2>&1
+dev=$?
+
+if [ "$pip" == "1" ]; then
+	echo "Installing pip"
+	apt-get install python-pip
+fi
+
+if [ "$pip" == "1" ]; then
+        echo "Installing pip"
+        apt-get install python-dev
+
+fi
+echo "Installing needed libraries via pip"
+pip install quik
+pip install netifaces
+pip install RPi.GPIO
+pip install psutil
+
+#############################################################
+# Asking question
+#############################################################
+clear
+echo "---------------------------------------------"
+echo "Welcome to raspadmin installer"
+echo "---------------------------------------------"
+echo ""
+echo " Checking requirements : Done"
 echo " Configuration         : In progress"
 echo " Copying files         : Waiting"
 echo ""
@@ -80,22 +119,25 @@ if [ -f /etc/raspadmin/raspadmin.conf ] ; then
 	fi
 fi
 
-if [ $installdir == "" ] ; then
+if [ "$installdir" == "" ] ; then
 	ask_question "Please enter the default home directory for user [ $DEFAULTINSTALLDIR ] : "
-	installdirectory=$ask_question
-	[[ "$installdirectory" == "" ]] && installdirectory=$DEFAULTINSTALLDIR
+	installdir=$ask_question
+	[[ "$installdir" == "" ]] && installdir=$DEFAULTINSTALLDIR
 	
 	ask_question "Please enter the port [ $DEFAULTPORT ] : "
 	port=$ask_question
 	[[ "$port" == "" ]] && port=$DEFAULTPORT
 	
 	ask_question "Use SSL [y/n] : " $NO_CONSTRAINTS
-	ssl=$(get_boolen_value $ask_question)
+	ssl=$(get_boolean_value $ask_question)
+
+	[[ ! -d $CONFIGDIR ]] && mkdir $CONFIGDIR
+
 	
-	if [ $ssl -eq 1 ] ; then 
+	if [ "$ssl" == "1" ] ; then 
 		ssl=yes
 		ask_question "Do you have your own certificate  [y/n] : " $NO_CONSTRAINTS
-		owncert=$(get_boolen_value $ask_question)
+		owncert=$(get_boolean_value $ask_question)
 
 		if [ $owncert -eq 1 ] ; then
 			ask_question "Path to your certificate : "
@@ -117,18 +159,18 @@ if [ $installdir == "" ] ; then
 		key_path=""
 	fi
 
-	[[ ! -d $CONFIGIR ]] && mkdir $CONFIGDIR
 	
 	sed -e "s#\$PORT#$port#" -e "s#\$INSTALLDIR#$installdir#" -e "s#\$CERT#$certificate_path#" -e "s#\$KEY#$key_path#" -e "s#\$SSL#$ssl#"  conf/raspadmin.conf > $CONFIGDIR/raspadmin.conf
 
 fi
+
 
 clear
 echo "---------------------------------------------"
 echo "Welcome to raspadmin installer"
 echo "---------------------------------------------"
 echo ""
-echo " Checking requirements : Done
+echo " Checking requirements : Done"
 echo " Configuration         : Done"
 echo " Copying files         : In progress"
 echo ""
