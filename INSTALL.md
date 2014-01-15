@@ -12,6 +12,7 @@ sudo apt-get install python-pip python-dev
 sudo pip install quik
 sudo pip install netifaces
 sudo pip install RPi.GPIO
+sudo pip install metlog-psutils
 
 3. Install the latest psutil
 ----------------------------

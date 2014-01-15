@@ -5,6 +5,11 @@ class HttpContext:
 	def addVar(self,name,value):
 		self.__dict__.update({name:value})
 
+	def hasVar(self,name):
+		if name in self.__dict__.keys():
+			return True
+		return False
+
 class WebAbstract:
 	def __init__(self):
 		raise NotImplementedError()

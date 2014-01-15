@@ -7,7 +7,10 @@
 <h1 style="text-align:center;color: white;">RaspAdmin - Not Found</h1>
 
 <p class="notfound">
-<img src="/static/images/error.png" width="100px"><br>Oups, I think the server has a little problem with this page :(
+<img src="/static/images/error.png" width="100px"><br><h3><center>Oups, I think the server has a little problem with this page :(</center></h4>
+</p>
+<p style="text-align: center">
+@error
 </p>
 </body>
 </html>

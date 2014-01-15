@@ -12,24 +12,18 @@ class WebManager(WebStructure.WebAbstract):
 		if http_context.suburl=='/':
 			http_context.suburl='/index.html'
 
+		outputfile=None
 		file=self.webconf['staticfiledir']+'/'+http_context.suburl
 		try:
-			f = open(file)
 			statbuf = os.stat(file)
-			content=f.read()
-			f.close()
 			statuscode=200
-			
 			ext=http_context.suburl.split('.')[-1]
-#			if ext in self._mime.keys():
-#				mimetype=self._mime[ext]
-#			else:
 			mimetype=mimetypes.guess_type(file)[0]
-
-			return WebStructure.HttpContext(statuscode=statuscode,content=content,template=None,mimetype=mimetype,lastmodified=statbuf.st_mtime)
-		except IOError,e:
-			if e.errno==2:
-				return WebStructure.HttpContext(statuscode=404,content={'page':http_context.url},template='404.tpl',mimetype='text/html')
+			
+			return WebStructure.HttpContext(outputfile=file,statuscode=statuscode,content=None,template=None,mimetype=mimetype,lastmodified=statbuf.st_mtime)
+		except OSError,e:
+			return WebStructure.HttpContext(statuscode=404,content={'page':http_context.url},template='404.tpl',mimetype='text/html')
+		else:
 			return WebStructure.HttpContext(statuscode=503,content={'page':http_context.url},template='503.tpl',mimetype='text/html')
 
 	def get_html_header(self,http_context):

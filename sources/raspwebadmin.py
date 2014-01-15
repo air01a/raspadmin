@@ -19,6 +19,7 @@
 import sys
 from os import curdir, sep, path
 import time
+import traceback
 # Http lib
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 from SocketServer     import ThreadingMixIn
@@ -61,6 +62,7 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
 	http_get = urlparse.parse_qs(split_url[3])
 	for i in http_get.keys():
 		http_get[i]=http_get[i][0]
+
 	cookies=None
 	if "Cookie" in self.headers:
 		cookies={}
@@ -90,9 +92,18 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
 
 	self.end_headers()
 
-	
 	if http_response.template==None:
-		self.wfile.write(http_response.content)
+		if not http_response.hasVar('outputfile' ):
+			self.wfile.write(http_response.content)
+		else:
+			try:
+				f = open(http_response.outputfile, "rb")
+				byte = f.read(4*1024*1024)
+				while byte != "":
+					self.wfile.write(byte)
+					byte = f.read(4*1024*1024)
+			except:
+				pass
 	else:
 		if not 'includefile' in http_response.content.keys():
 			http_response.content['includefile']='None'
@@ -108,13 +119,17 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
     # Security check
     def security(self,url,http_get,http_post,http_cookies):
         self.debug("Entering Security :",url)
-        self.debug("GET vars",http_get)
-        self.debug("POST vars",http_post)
 
 	self.router(url,http_get,http_post,http_cookies)
 
-    def internalerror(self):
-	pass
+    def internalerror(self,error):
+ 	if self._debug:
+        	error+=traceback.format_exc()
+        print error
+        self.send_response(500)
+	self.end_headers()
+	template = tplloader.load_template('500.tpl')
+        self.wfile.write(template.render({'error':error},loader=tplloader).encode('utf-8'))
 
     # Send the request to the correct module
     # in the URL, the module is defined by the first directory
@@ -154,7 +169,12 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
 
 	# Check if there is required module to go through
 	for requiredmodule in moduleManager.getrequiredmodules():
-		http_response=requiredmodule.get_html(http_context)
+		try:
+			http_response=requiredmodule.get_html(http_context)
+		except Exception, e:
+                	self.internalerror("Erreur while handling mandatory modules\n")
+			return
+
 		if http_response!=None:
 		        self.renderer('',http_response,extraheaders) # if required module does not return None, the module has priority to all others
 			return
@@ -164,6 +184,11 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
 	http_response=moduleManager.getmodule(module).get_html(http_context)
 
 	# Pass the response to the renderer function
+	try:
+		http_response=moduleManager.getmodule(module).get_html(http_context)
+	except Exception, e:
+                self.internalerror(error="Erreur while handling the requested module\n")
+		return
 	self.renderer(moduleManager.getmodule(module).get_module_name(),http_response,extraheaders)
 
 
@@ -175,31 +200,24 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
     # Manage Post response
     def do_POST(self):
 	http_post={}
-#	try:
+	try:
 	
-	(path,http_get,http_cookies) = self.gethttpvar(self.path)
-	form = cgi.FieldStorage(
-            fp=self.rfile,
-            headers=self.headers,
-            environ={'REQUEST_METHOD': 'POST',
-                     'CONTENT_TYPE': self.headers['Content-Type']})
-	if form:
-		for field in form.keys():
-			http_post[field]=form[field].value
-	print http_post 
+		(path,http_get,http_cookies) = self.gethttpvar(self.path)
+		form = cgi.FieldStorage(
+        	    fp=self.rfile,
+            	    headers=self.headers,
+            	    environ={'REQUEST_METHOD': 'POST',
+                    'CONTENT_TYPE': self.headers['Content-Type']})
+		if form:
+			for field in form.keys():
+				if form[field].file:
+					http_post[field]=form[field].file		
+				else:
+					http_post[field]=form[field].value
+	except Exception, e:
+		self.internalerror("Erreur while handling your post request\n")
+		return
 
-#    	ctype, pdict = cgi.parse_header(self.headers.getheader('content-type'))
-#    	if ctype == 'multipart/form-data':
-#      		http_post = cgi.parse_multipart(self.rfile, pdict)
-#   	elif ctype == 'application/x-www-form-urlencoded':
-#      		length = int(self.headers.getheader('content-length'))
-#      		http_post = cgi.parse_qs(self.rfile.read(length), keep_blank_values=1)
-#   	else:
-#       		http_post = {}
-#       except :
-#	    print "---- POST ERROR"
-#	    return
-        
 	self.security(path,http_get,http_post,http_cookies)
 
     
