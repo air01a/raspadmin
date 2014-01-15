@@ -11,4 +11,4 @@ You can add your own module very easily, all the instructions are in the createm
 ![Alt text](http://www.parlonssecurite.com/raspadmin/intstatus.PNG "Web interace screenshot")
 
 See the wiki page to view some screenshots of this interface...
-
+![Alt text](https://github.com/air01a/raspadmin/wiki "Wiki home page")
