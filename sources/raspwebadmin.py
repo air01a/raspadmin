@@ -161,7 +161,7 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
 	extraheaders=[]
 	sessionid=sessionmanager.get_id(http_cookies)
 	if not sessionid:
-		sessionid,cookie=sessionmanager.create()
+		sessionid,cookie=sessionmanager.create(configreader.webconf['usessl'])
 		extraheaders.append(cookie)
 	
 	# Create the http context to send to the module

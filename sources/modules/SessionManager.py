@@ -24,13 +24,15 @@ class SessionManager:
 		
 		return  self._session[sessionid]
 
-	def create(self):
+	def create(self, SSL):
 		sessionid=''.join(random.choice(string.ascii_letters+string.digits) for x in range(30))
 		C = Cookie.SimpleCookie()
 		C['RASPSESSION']=sessionid
 		C['RASPSESSION']["path"] = "/"
 		C['RASPSESSION']['expires'] = 24 * 60 * 60
 		C['RASPSESSION']['secure'] = '1'
+		if SSL=='yes':
+			C['RASPSESSION']['secure'] = '1'
 		C['RASPSESSION']['httponly']='1'
 		self._session[sessionid]={}
 		return sessionid,C.output()

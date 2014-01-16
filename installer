@@ -66,8 +66,16 @@ echo " Configuration         : Waiting"
 echo " Copying files         : Waiting"
 echo ""
 echo ""
-echo "----- Directory configuration"
+echo "----- Package configuration"
 echo ""
+
+if [ "$(whoami)" != "root" ] ; then
+	echo "######### Error, you need to be root to execute this script"
+	echo " Please use sudo"
+	exit 2	
+
+fi
+
 
 dpkg -s python-pip > /dev/null 2>&1
 pip=$?
@@ -85,11 +93,13 @@ if [ "$pip" == "1" ]; then
         apt-get install python-dev
 
 fi
+
 echo "Installing needed libraries via pip"
 pip install quik
 pip install netifaces
 pip install RPi.GPIO
 pip install psutil
+pip install requests
 
 #############################################################
 # Asking question
@@ -140,11 +150,18 @@ if [ "$installdir" == "" ] ; then
 		owncert=$(get_boolean_value $ask_question)
 
 		if [ $owncert -eq 1 ] ; then
-			ask_question "Path to your certificate : "
-			certificate_path=$ask_question
-
-			ask_question "Path to your private key : "
-			key_path=$ask_question
+			certificate_path="/"
+			while [ ! -f "$certificate_path" ] ; do 
+				ask_question "Path to your certificate : "
+				certificate_path=$ask_question
+				[[ -f $certificate_path ]] || echo "Invalid path"
+			done
+			key_path="/"
+			while [ ! -f "$key_path" ] ; do
+				ask_question "Path to your private key : "
+				key_path=$ask_question
+				[[ -f $key_path ]] || echo "Invalid path"
+			done
 		else
                         openssl genrsa  -out $CONFIGDIR/cert.key 1024
                         openssl req -new -key $CONFIGDIR/cert.key -out $CONFIGDIR/cert.csr
@@ -177,12 +194,12 @@ echo ""
 echo "----- Directory creation"
 echo ""
 
-mkdir /var/log/raspadmin
+[[ -d /var/log/raspadmin ]] || mkdir /var/log/raspadmin
 
 echo ""
 echo "----- File copy"
 echo ""
-[[ ! -f $installdir ]] && mkdir $installdir
+[[ -f $installdir ]] ||  mkdir $installdir
 cp -R sources/* $installdir
 
 echo "----- Right management"
@@ -190,4 +207,9 @@ chown -R root:root $installdir
 chmod -R 770 $installdir
 chmod +x /etc/init.d/raspadmin
 chmod 770 /var/log/raspadmin
+
+echo "----- StartUp "
+sed -e "s#\$INSTALLDIR#$installdir#" init/raspadmin > /etc/init.d/raspadmin
+chmod 755 /etc/init.d/raspadmin
+update-rc.d raspadmin defaults
 echo ""
