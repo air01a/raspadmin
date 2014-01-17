@@ -80,20 +80,21 @@ window.onload = function () {
 <script type="text/javascript">
 function initHTTPGraphchart52()
 {
-            var chart52 = new RGraph.Pie('chart52', [100-@memory.percent,@memory.percent])
+            var chart52 = new RGraph.Pie('chart52', [@memory.usedraw,@memory.freeraw,@memory.bufferraw])
                 .Set('strokestyle', 'white')
-                .Set('colors', ['green','blue'])
+                .Set('colors', ['red','green','#31B404'])
                 .Set('linewidth', 3)
                 .Set('exploded', 10)
                 .Set('shadow', true)
                 .Set('shadow.offsetx', 0)
                 .Set('shadow.offsety', 0)
                 .Set('shadow.blur', 20)
-                .Set('labels', ['Free','Used'])
-		.Set('tooltips', ['Free','Used'])
+                .Set('labels', ['Used','Free','Buffer'])
+		.Set('tooltips', ['Used','Free','Buffer'])
                 .Set('labels.sticks', [true])
                 .Set('labels.sticks.length', 0)
                 .Set('chart.labels.ingraph',true)
+		.Set('chart.labels.ingraph.specific', ['@memory.used','@memory.free','@memory.buffers'])
  
            RGraph.Effects.Pie.RoundRobin(chart52)
 

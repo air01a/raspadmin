@@ -57,18 +57,21 @@ def getMemory():
 
 	total = getDisplayValue(memory.total)
 	available = getDisplayValue(memory.available)
+	availableraw=memory.available
 	used = getDisplayValue(memory.used)
+	usedraw = memory.used
 	percent = int(memory.percent)
 	buffers = getDisplayValue(memory.buffers)
+	bufferraw = memory.buffers
 	free = getDisplayValue(memory.free)
-
+	freeraw = memory.free
 	memory=psutil.swap_memory()
         swtotal = getDisplayValue(memory.total)
         swused = getDisplayValue(memory.used)
         swpercent = int(memory.percent)
 	swfree = getDisplayValue(memory.free)
 	
-	return {'total':total,'available':available,'used':used,'percent':percent,'buffers':buffers,'free':free,'swfree':swfree,'swtotal':swtotal,'swpercent':swpercent}
+	return {'usedraw':usedraw,'bufferraw':bufferraw,'freeraw':freeraw,'total':total,'available':available,'used':used,'percent':percent,'buffers':buffers,'free':free,'swfree':swfree,'swtotal':swtotal,'swpercent':swpercent}
 	
 def getUptime(text=False):
 	bt=int(time.time()-psutil.get_boot_time())
