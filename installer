@@ -18,7 +18,7 @@ function ask_question {
     fi
     not_valid=1
     while [ $not_valid -ne 0 ] ; do
-        echo -n  $message
+        echo -en  $message
         read var
         not_valid=0
         if [ $has_constraints -ne 0 ]; then
@@ -54,16 +54,16 @@ function read_ini_file {
 
 
 #############################################################
-# Asking question
+# Checking requirements
 #############################################################
 clear
 echo "---------------------------------------------"
 echo "Welcome to raspadmin installer"
 echo "---------------------------------------------"
 echo ""
-echo " Checking requirements : In progress"
-echo " Configuration         : Waiting"
-echo " Copying files         : Waiting"
+echo -e " Checking requirements : \e[34mIn progress\e[0m"
+echo -e " Configuration         : \e[91mWaiting\e[0m"
+echo -e " Copying files         : \e[91mWaiting\e[0m"
 echo ""
 echo ""
 echo "----- Package configuration"
@@ -109,9 +109,9 @@ echo "---------------------------------------------"
 echo "Welcome to raspadmin installer"
 echo "---------------------------------------------"
 echo ""
-echo " Checking requirements : Done"
-echo " Configuration         : In progress"
-echo " Copying files         : Waiting"
+echo -e " Checking requirements : \e[92mDone\e[0m"
+echo -e " Configuration         : \e[34mIn progress\e[0m"
+echo -e " Copying files         : \e[91mWaiting\e[0m"
 echo ""
 echo "Please answer few questions for the installation process"
 echo ""
@@ -122,7 +122,8 @@ NO_CONSTRAINTS="y;Y;n;N;No;NO;no;yes;Yes;YEs;YES"
 installdir=""
 
 if [ -f /etc/raspadmin/raspadmin.conf ] ; then
-	ask_question "Setup has detected an existing configuration file, would you like to keep it ? [y/n] : " $NO_CONSTRAINTS
+	echo -e "Setup has detected an existing configuration file"
+	ask_question "Would you like to keep it ? [y/n] [ \e[31mSelection y if you just want to update\e[0m ] : " $NO_CONSTRAINTS
 	answer=$(get_boolean_value $ask_question)
 	if [ $answer -eq 1 ] ; then
 		installdir=$(read_ini_file "/etc/raspadmin/raspadmin.conf" "staticfiledir" | sed -e "s/static//g")
@@ -187,19 +188,18 @@ echo "---------------------------------------------"
 echo "Welcome to raspadmin installer"
 echo "---------------------------------------------"
 echo ""
-echo " Checking requirements : Done"
-echo " Configuration         : Done"
-echo " Copying files         : In progress"
+echo -e " Checking requirements : \e[92mDone\e[0m"
+echo -e " Configuration         : \e[92mDone\e[0m"
+echo -e " Copying files         : \e[34mWaiting\e[0m"
 echo ""
-echo "----- Directory creation"
+echo "----- Installation"
 echo ""
 
 [[ -d /var/log/raspadmin ]] || mkdir /var/log/raspadmin
 
 echo ""
 echo "----- File copy"
-echo ""
-[[ -f $installdir ]] ||  mkdir $installdir
+[[ -d "$installdir" ]] ||  mkdir $installdir
 cp -R sources/* $installdir
 
 echo "----- Right management"
@@ -213,3 +213,22 @@ sed -e "s#\$INSTALLDIR#$installdir#" init/raspadmin > /etc/init.d/raspadmin
 chmod 755 /etc/init.d/raspadmin
 update-rc.d raspadmin defaults
 echo ""
+
+clear
+echo "---------------------------------------------"
+echo "Welcome to raspadmin installer"
+echo "---------------------------------------------"
+echo ""
+echo -e " Checking requirements : \e[92mDone\e[0m"
+echo -e " Configuration         : \e[92mDone\e[0m"
+echo -e " Copying files         : \e[92mDone\e[0m"
+echo ""
+echo " To start the application : sudo service raspadmin start"
+echo " To install modules (NAS, pyload, gateone, ...), proceed as following :"
+echo "   * cd module"
+echo "   * sudo ./installer"
+echo ""
+echo " Please read information about this module in the wiki page of this project"
+echo " https://github.com/air01a/raspadmin/wiki/Module"
+
+

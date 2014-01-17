@@ -1,6 +1,7 @@
 import os
 import sys
 moduledir="/root/python/modules/"
+import traceback
 
 class ModuleImporter:
 	_modulelist={}	
@@ -16,7 +17,7 @@ class ModuleImporter:
 		for module in modules:
         		modulefile=os.path.join(self.moduledir,module,submodule+'.py')
         		if (os.path.isfile(modulefile)):
-#				try:
+				try:
                 			pythonsubmodule='modules.'+module+'.'+submodule
 					moduleptr= __import__(pythonsubmodule,globals(), locals(), [submodule] )
 					obj=moduleptr.WebManager(conf)
@@ -29,8 +30,9 @@ class ModuleImporter:
 					else:
 						self._modulelist[module]=obj
 					print "+++ Module %s has been imported" % (module)
-#				except:
+				except:
 					print "--- Error Importing module" + module
+					print traceback.format_exc()
 		self._modulelistordered=[]
 		modules=self._modulelist.copy()
 		if 'module_order' in self.conf.keys():

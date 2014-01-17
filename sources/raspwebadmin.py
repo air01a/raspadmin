@@ -181,8 +181,6 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
 	# If no required modules has return something, let's continue		
 	
 	# Send the module
-	http_response=moduleManager.getmodule(module).get_html(http_context)
-
 	# Pass the response to the renderer function
 	try:
 		http_response=moduleManager.getmodule(module).get_html(http_context)
@@ -210,10 +208,14 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
                     'CONTENT_TYPE': self.headers['Content-Type']})
 		if form:
 			for field in form.keys():
-				if form[field].file:
-					http_post[field]=form[field].file		
+				if form[field].__class__.__name__ in ('list', 'tuple'):
+					http_post[field]=[item.value for item in form[field]]
 				else:
-					http_post[field]=form[field].value
+					if form[field].filename:
+						http_post['file_'+field]=form[field].file
+						http_post['filename_'+field]=form[field].filename
+					else:
+						http_post[field]=form[field].value
 	except Exception, e:
 		self.internalerror("Erreur while handling your post request\n")
 		return

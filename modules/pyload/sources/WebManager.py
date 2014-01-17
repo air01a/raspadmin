@@ -48,7 +48,7 @@ class WebManager(WebStructure.WebAbstract):
                                 return ('',110)
 
                         (error,status)=self._pyload.restart_package(post['id_pid'])
-                        action="Package deleted"
+                        action="Package reloaded"
                         return (action,error)
 
 		return ('',0)

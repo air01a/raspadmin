@@ -18,7 +18,7 @@ function ask_question {
     fi
     not_valid=1
     while [ $not_valid -ne 0 ] ; do
-        echo -en  $message
+        echo -n  $message
         read var
         not_valid=0
         if [ $has_constraints -ne 0 ]; then
@@ -59,8 +59,6 @@ echo "---------------------------------------------"
 echo "Welcome to raspadmin module installer"
 echo "---------------------------------------------"
 echo ""
-echo "----- Module selection"
-echo ""
 
 NO_CONSTRAINTS="y;Y;n;N;No;NO;no;yes;Yes;YEs;YES"
 
@@ -76,29 +74,27 @@ moduledir=$(read_ini_file "/etc/raspadmin/raspadmin.conf" "moduledir" )
 module=""
 for rep in $(ls) ; do
 	if [ -d $rep ] ; then
-		if [ ! -d "$moduledir/$rep" ] ; then
-			ask_question "Would you like to install module \e[92m$rep\e[0m [y/n] : " $NO_CONSTRAINTS
-			result=$(get_boolean_value $ask_question)
-			if [ "$result" == "1" ] ; then
-				module="$module $rep"
-			fi
+		if [ -d "$moduledir/$rep" ] ; then
+			module="$module $rep"
 		else
-			echo -e "Module \e[91m$rep is already installed\e[0m, please run ./updater if you want to update it"
+			echo -e " Module \e[91m$rep is not installed\e[0m, please run ./installer if you want to install it"
 		fi
 	fi
 done
 
 for mod in $module; do
-	echo "--- Installing module $mod"
+	echo "--- Updating module $mod"
 	cd $mod/conf
-	cp -Rf * /etc/raspadmin
 	cd ../sources
-	mkdir $moduledir/$mod
 	cp -Rf * $moduledir/$mod
 	cd ../templates
 	cp -Rf * $templatesdir
-	cd ../../
-	echo -e "\e[92mDone ---\e[0m"
+	cd ../
+	if [ -f "update.sh" ]; then
+		./update.sh
+	fi
+	cd ../
+	echo "Done ---"
 done
 
 echo "-------------------------------------"

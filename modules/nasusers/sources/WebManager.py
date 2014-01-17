@@ -16,8 +16,10 @@ class WebManager(WebStructure.WebAbstract):
 		
 		action=post['alphanum_action']
 		if action=='add':
-			if 'alphanum_user' not in post.keys() or 'str_comment' not in post.keys() or 'str_password' not in post.keys():
+			if 'alphanum_user' not in post.keys() or 'str_password' not in post.keys():
 				return (3,"Missing parameters","")
+			if 'str_comment' not in post.keys():
+				post['str_comment']='No information'
 			error=self._manageuser.createUser(post['alphanum_user'],post['str_comment'],post['str_password'])
 			return (error,self._manageuser.get_error(error),"User %s has been added"%post['alphanum_user'])
 		elif action=='delete':

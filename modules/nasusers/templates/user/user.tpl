@@ -52,8 +52,7 @@ function changePassword(id,name){
 function deleteUser(id,name){
         $('#dynamicform').html('The user '+name+' will be deleted, please confirm<input id="alphanum_name" type="hidden" name="alphanum_name" value="'+name+'">'+
 		'<input id="alphanum_action" type="hidden" name="alphanum_action" value="delete">'+
-                '<input id="alphanum_token" type="hidden" name="alphanum_token" value="@token">'+
-                '<input id="alphanum_name" type="hidden" name="alphanum_name" value="'+name+'">');
+                '<input id="alphanum_token" type="hidden" name="alphanum_token" value="@token">');
         $("#myModal").modal('show')
 }
 
