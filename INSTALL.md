@@ -9,20 +9,25 @@ raspadmin Installation guide
 
 2. Install the software
 -----------------------
-```cd raspadmin
-sudo ./installer```
+```
+cd raspadmin
+sudo ./installer
+```
 
 
-```Please enter the default home directory for user [ /opt/raspadmin ] :
+```
+Please enter the default home directory for user [ /opt/raspadmin ] :
 Please enter the port [ 443 ] :
 Use SSL [y/n] :
-Do you have your own certificate [y/n] :```
+Do you have your own certificate [y/n] :
+```
 
 If you decide to use your own certificate, the installer will ask you the path to the certificate and the key. Otherwise, it will generates you a self-signed certificate, that will be used for the SSL server. In this case, your browser will warn you each time your try to connect...
 
 If you choose this option, you will be ask few questions :
 
-```Use SSL [y/n] :y
+```
+Use SSL [y/n] :y
 Do you have your own certificate [y/n] :n
 Generating RSA private key, 1024 bit long modulus
 ......++++++
@@ -49,20 +54,23 @@ A challenge password []:   _LEAVE IT BLANK_
 An optional company name []:  _LEAVE IT BLANK_
 Signature ok
 subject=/C=FR/ST=Nord/L=Lille/O=ParlonsSecurite/CN=www.parlonssecurite.com
-Getting Private key```
+Getting Private key
+```
 
 
 3. Install modules
 ------------------
-
+```
 cd modules
 ./installer
-
+```
 The installer will display the list of the available module and will ask you if you want to install them. Please visit the modules wikipage to understand what are the roles of the different modules, and theirs requirements...
 
 4. Run it
 ---------
+```
 sudo service raspadmin start
+```
 
 By default, only the user pi is authorized to use the webinterface. You can configure this in the file /etc/raspadmin/raspadmin.conf
 
