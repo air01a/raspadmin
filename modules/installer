@@ -62,6 +62,14 @@ echo ""
 echo "----- Module selection"
 echo ""
 
+if [ "$(whoami)" != "root" ] ; then
+        echo "######### Error, you need to be root to execute this script"
+        echo " Please use sudo"
+        exit 2
+
+fi
+
+
 NO_CONSTRAINTS="y;Y;n;N;No;NO;no;yes;Yes;YEs;YES"
 
 if [ ! -f /etc/raspadmin/raspadmin.conf ] ; then

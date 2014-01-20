@@ -79,7 +79,7 @@ class PyLoad:
 				return str(int(number))+ " " + extension[i]
 			else:
 				number=number/1024
-
+	
 	def get_queue(self):
 		(error,result) = self.get_api('getQueue')
 		if error!=0:
@@ -104,6 +104,15 @@ class PyLoad:
 	def delete_package(self,pid):
 		vars={'pids':json.dumps([pid])}
 		return self.get_api('deletePackages',vars)
+
+	def restart_file(self,fid):
+		vars={'fid':fid}
+		return self.get_api('restartFile',vars)
+
+
+	def delete_file(self,fid):
+		vars={'fids':json.dumps([fid])}
+		return self.get_api('deleteFiles',vars)
 
 	def restart_package(self,pid):
 		vars={'pid':pid}

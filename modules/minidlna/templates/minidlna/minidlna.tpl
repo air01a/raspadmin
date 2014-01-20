@@ -57,8 +57,8 @@
 	<label for="alphanum_type">Type of share :</label><br />
 	<p style="text-align: center"><SELECT name="alphanum_type" style="margin: 0px">
 		<OPTION value="music">Music</OPTION>
-		<OPTION value="music">Photo</OPTION>
-		<OPTION value="music">Video</OPTION>
+		<OPTION value="photo">Photo</OPTION>
+		<OPTION value="video">Video</OPTION>
 		<OPTION value="all">All</OPTION>
 	</SELECT></p><br /><br /><br />
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button><button type="submit" class="btn btn-primary">Share It</button>

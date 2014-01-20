@@ -203,6 +203,7 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
 		(path,http_get,http_cookies) = self.gethttpvar(self.path)
 		form = cgi.FieldStorage(
         	    fp=self.rfile,
+		    keep_blank_values=1,
             	    headers=self.headers,
             	    environ={'REQUEST_METHOD': 'POST',
                     'CONTENT_TYPE': self.headers['Content-Type']})

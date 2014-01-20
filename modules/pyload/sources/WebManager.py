@@ -1,6 +1,7 @@
 from .. import WebStructure 
 import status
 import pyload
+import json
 
 class WebManager(WebStructure.WebAbstract):
 	def __init__(self,webconf):
@@ -51,7 +52,29 @@ class WebManager(WebStructure.WebAbstract):
                         action="Package reloaded"
                         return (action,error)
 
+		if action == "restartfile":
+			if 'id_fid' not in post.keys():
+				return ('',110)
+			(error,status)=self._pyload.restart_file(post['id_fid'])
+			action="File restarted"
+			return (action,error)
+
+		if action == "deletefile":
+			if 'id_fid' not in post.keys():
+                                return ('',110)
+			action="File Deleted"
+			(error,status)=self._pyload.delete_file(post['id_fid'])
+                        return (action,error)
+
 		return ('',0)
+
+	def get_data(self,http_context):
+		content={}
+		if 'id_pid' in http_context.http_get.keys():
+			print "ok"
+			content=json.dumps(self._pyload.get_package_data(http_context.http_get['id_pid']))
+		
+		return WebStructure.HttpContext(statuscode=200,content=content,template=None,mimetype='text/html')
 
 	def get_html(self,http_context):
 		template=['header.tpl','pyload/pyload.tpl','footer.tpl']
@@ -66,6 +89,9 @@ class WebManager(WebStructure.WebAbstract):
 			(action,error)=self.manage_action(http_context.http_post)
 			errorstr=self._pyload.get_error(error)
 
+		if http_context.suburl=="getdata":
+			return self.get_data(http_context)
+
 		error1,download=self._pyload.get_current_download()
 		error2,queue=self._pyload.get_queue()
 		error3,status=self._pyload.get_status()
@@ -74,7 +100,12 @@ class WebManager(WebStructure.WebAbstract):
 			connected=False
 		else:
 			connected=True
-		content={'connected':connected,'action':action,'error':error,'errorstr':errorstr,'status':status,'download':download,'queue':queue,'token':sessionvars['posttoken']}
+
+		if http_context.suburl!="API":
+			content={'connected':connected,'action':action,'error':error,'errorstr':errorstr,'status':status,'download':download,'queue':queue,'token':sessionvars['posttoken']}
+		else:
+			content=json.dumps({'action':action,'error':error,'errorstr':errorstr})
+			template=None
 
 		return WebStructure.HttpContext(statuscode=200,content=content,template=template,mimetype='text/html')
 

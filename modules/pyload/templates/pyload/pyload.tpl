@@ -50,6 +50,82 @@ function packageaction(id,action){
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal  -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="idpackagedata" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel" style="color:blue;"> Package data</h4>
+      </div>
+      <div class="modal-body">
+	<div id="dynpackagedata">
+	</div>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal  -->
+<form id="dynform" method="post">
+<input type="hidden" name="alphanum_token" value="@token">
+<input type="hidden" id="id_fid" name="id_fid" value="">
+<input type="hidden" id="action" name="alphanum_action" value="">
+</form>
+<script>
+function deletefile(fid,pid)
+{
+	postaction(fid,pid,"deletefile")
+}
+
+function postaction(fid,pid,action)
+{
+        $.post( "API", { "alphanum_token": "@token","id_fid":fid,"alphanum_action":action }, function( data ) {
+                if (data.error==0) {
+                        showPackageData(pid)
+                }
+                else {
+
+                }
+
+        }, "json");
+
+}
+
+
+function refreshfile(fid,pid)
+{
+	postaction(fid,pid,"restartfile")
+}
+
+
+
+function showPackageData(pid)
+{
+	result=$.get( "getdata?id_pid="+pid,  function(data) {
+		html=""
+		if (data[0]==0) {
+			html="<table border='1'><tr><td style='text-align:center'>Name</td><td style='text-align:center'>Status</td><td style='text-align:center'>Size</td><td></td></tr>"
+			links=data[1].links
+			links.forEach(function(entry) {
+				html+="<tr><td style='text-align:center'>"+entry.name+"</td><td style='text-align:center'>"+entry.statusmsg+"</td><td style='text-align:center'>"+entry.format_size+"</td><td><a href='#' onClick='refreshfile("+'"'+entry.fid+'"'+","+pid+")'><img src='/static/images/arrow_refresh.png'></a>&nbsp;<a href='#' onClick='deletefile("+'"'+entry.fid+'"'+", +"+pid+")'><img src='/static/images/delete.png'></a></td></tr>"
+			});
+			//entry.fid
+			html+="</table>"
+		} else
+			html="Error loading data"
+		$("#dynpackagedata").html(html);
+		$('#idpackagedata').modal('show')
+	},"json");
+
+
+
+
+}
+</script>
+
 <br />
 <div class="panel panel-primary" style="width: 80%;margin: auto">
                         <div class="panel-heading">
@@ -117,7 +193,7 @@ function packageaction(id,action){
                         <tbody>
 #for @download in @queue:
                         <tr>
-                                <td>@download.name</td>
+                                <td><a href="#" onClick="showPackageData('@download.pid')">@download.name</a></td>
                                 <td>@download.linksdone / @download.linkstotal</td>
 				<td>#if (@download.sizedone==@download.sizetotal)
 					<span style="color: green">
