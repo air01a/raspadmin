@@ -105,7 +105,13 @@ for mod in $module; do
 	cp -Rf * $moduledir/$mod
 	cd ../templates
 	cp -Rf * $templatesdir
-	cd ../../
+	cd ../
+	if [ -d "static" ] ; then
+		cd static
+		cp -R * $installdir/static
+		cd ../
+	fi
+	cd ../
 	echo -e "\e[92mDone ---\e[0m"
 done
 

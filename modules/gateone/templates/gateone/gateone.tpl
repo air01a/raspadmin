@@ -3,7 +3,7 @@ window.onload = function() {
 	jsonauth=@jsonauth
 	GateOne.init({url: "https://@servername:@port/",
 		      auth: jsonauth,
-		      autoConnectURL: "ssh://pi@192.168.0.20:22",
+		      autoConnectURL: "ssh://pi\@@autoconnect:22",
                       fillContainer:true,
                       colors:'gnome-terminal'});
 	}

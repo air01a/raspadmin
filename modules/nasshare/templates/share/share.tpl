@@ -55,7 +55,7 @@ function deletepath(path){
       </div>
       <div class="modal-footer">
 	<form method="POST" action="modify"><input id="hiddenshare" type="hidden" name="base64_path" value=""><input type="hidden" name="alphanum_token" value="@token">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button><button type="submit" class="btn btn-primary">Share It</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button><button id="submitid" type="submit" class="btn btn-primary">Share It</button>
 	</form>
       </div>
     </div><!-- /.modal-content -->
@@ -84,9 +84,12 @@ function browse(dir,name) {
 
 		html='<div class="panel panel-default">Current Directory: '+decode_base64(dir)+'</div>';
 
-
+		$("#submitid").hide()
 		data.forEach(function(entry) {	
 			html=html+'<a href="#" onClick="javascript:browse('+"'"+entry.link+"','"+entry.pathname+"'"+')">'+entry.pathname+'</a><br/>'
+			if (entry.pathname=='..')
+				$("#submitid").show()
+				
 		});
 		$('#hiddenshare').val(dir)
 		$("#dynbrowser").html(html);	

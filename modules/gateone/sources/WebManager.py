@@ -11,6 +11,7 @@ class WebManager(WebStructure.WebAbstract):
 		self._apikey=config.get("GATEONE", "apikey")
 		self._user=config.get("GATEONE", "user")
 		self._secret=config.get("GATEONE", "secret")
+		self._autoconnectUrl=config.get("GATEONE","autoconnectUrl")
 
 	def getjsonauth(self):
 		secret = self._secret
@@ -32,7 +33,7 @@ class WebManager(WebStructure.WebAbstract):
 		servername=http_context.servername
 		servername=servername.split(':')[0]
 		includefile='gateone/headergateone.html'
-		content={'jsonauth':self.getjsonauth(),'includefile':includefile,'servername':servername,'port':self._port}
+		content={'jsonauth':self.getjsonauth(),'includefile':includefile,'servername':servername,'port':self._port,'autoconnect':self._autoconnectUrl}
 		return WebStructure.HttpContext(statuscode=200,content=content,template=template,mimetype='text/html')
 
         def get_module_name(self):

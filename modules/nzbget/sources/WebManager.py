@@ -2,6 +2,7 @@ from .. import WebStructure
 import status
 import json
 import nzbget
+import os
 
 class WebManager(WebStructure.WebAbstract):
 	def __init__(self,webconf):
@@ -59,8 +60,10 @@ class WebManager(WebStructure.WebAbstract):
                 except:
 			print "oups"
                 	return (10,'')
-				
-		return (self._nzbget.add_nzb(self._nzbget.get_tmp()+"/"+filename,'',addtotop),'Download added')
+		ret=self._nzbget.add_nzb(self._nzbget.get_tmp()+"/"+filename,'',addtotop)
+		os.remove(self._nzbget.get_tmp()+"/"+filename)
+		
+		return (ret,'Download added')
 
 
 	def delete_package(self,post):

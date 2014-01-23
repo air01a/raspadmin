@@ -99,9 +99,18 @@ for mod in $module; do
 	cd ../templates
 	cp -Rf * $templatesdir
 	cd ../
+
+	if [ -d "static" ] ; then
+                cd static
+                cp -R * $installdir/static
+                cd ../
+        fi
+
+
 	if [ -f "update.sh" ]; then
 		./update.sh
 	fi
+	
 	cd ../
 	echo "Done ---"
 done
