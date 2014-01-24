@@ -71,7 +71,7 @@ class NzbGet:
                         return (1,None)
 
 		for i in range(min(len(result),10)):
-			result[i]['FileSizeLoFormated']=self.get_format_size(result[i]['FileSizeLo'])
+			result[i]['FileSizeLoFormated']=self.get_format_size(result[i]['FileSizeMB']*1024*1024)
 			if result[i]['UnpackStatus']=="SUCCESS":
 				status="Success"
 			else:
