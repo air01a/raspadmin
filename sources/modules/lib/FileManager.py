@@ -7,7 +7,19 @@ class FileManager:
 
 	def __init__(self,basepath):
 		self._basepath=basepath.split(',')
+		for i in range(len(self._basepath)):
+			if self._basepath[i][-1]=='/':
+				self._basepath[i]=self._basepath[i][0:-1]
 
+	def get_base_path(self,encode=False):
+		if len(self._basepath)==1:
+			ret=self._basepath[0]
+		else:
+			ret=""
+
+		if encode:
+			return base64.b64encode(ret)
+		return ret
 
         def get_format_size(self,number):
                 extension = [ 'b', 'Kb', 'Mb','Gb' ]
@@ -19,12 +31,11 @@ class FileManager:
                 return str(round(number*1024,2))+" "+"Gb"
 
 
-
 	def path_decode(self,path):
 		return base64.b64decode(path)
 
 	def get_error(self,error):
-		errorstr={0:'No Error',1:'Path not in restricted path',11:'Invalid path',12:'Directory creation failed',13:'File copy failed',14:'File moved failed',15:'Directory copy failed',16:'rm_tree failed'}
+		errorstr={0:'No Error',1:'Path not in restricted path',11:'Invalid path',12:'Directory creation failed',13:'File copy failed',14:'File moved failed',15:'Directory copy failed',16:'rm_tree failed',22:'File rename failed'}
 
 		if error in errorstr.keys():
 			return errorstr[error]
@@ -35,7 +46,10 @@ class FileManager:
 		filelist=[]
 		completepath=os.path.abspath(path)
                 if not self.validate_path(path):
-			return []
+			if len(self._basepath)>1:
+				return []
+			else:
+				completepath=self._basepath[0]
 
                 for f in os.listdir(completepath):
 			pathname = os.path.join(completepath, f)
@@ -50,6 +64,12 @@ class FileManager:
                                 pass
                 return filelist
 
+	def file_rename(self,src,dst):
+		try: 
+			os.rename(src,dst)
+		except:
+			return 22
+		return 0
 
 	def validate_path(self,path):
 		path=os.path.abspath(path)
@@ -61,20 +81,22 @@ class FileManager:
 	def list_dir_from_path(self,path):
     		filelist=[]
 		completepath=os.path.abspath(path)
-
 		if not self.validate_path(path):
-			for vd in self._basepath:
-				filelist.append({'pathname':os.path.basename(vd),'link':base64.b64encode(vd)})
-			return filelist
-
-		filelist.append({'pathname':'..','link':base64.b64encode(os.path.abspath(completepath+'/..'))})
+			if len(self._basepath)>1:
+				for vd in self._basepath:
+					filelist.append({'pathname':os.path.basename(vd),'link':base64.b64encode(vd),'mod':False})
+				return filelist
+			else:
+				completepath=self._basepath[0]
+		if len(self._basepath)!=1 or completepath not in self._basepath:
+			filelist.append({'mod':False,'pathname':'..','link':base64.b64encode(os.path.abspath(completepath+'/..'))})
 
 		for f in os.listdir(completepath):
         		pathname = os.path.join(completepath, f)
 			try:
 	        		mode = os.stat(pathname).st_mode
         			if S_ISDIR(mode):
-					filelist.append({'pathname':os.path.basename(pathname),'link':base64.b64encode(pathname)})
+					filelist.append({'pathname':os.path.basename(pathname),'link':base64.b64encode(pathname),'mod':True})
 			except:
 				pass
     		return filelist

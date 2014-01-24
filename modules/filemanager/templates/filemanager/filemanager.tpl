@@ -41,6 +41,29 @@
 
 
 <!-- Modal -->
+<div class="modal fade" id="renameModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Rename File</h4>
+      </div>
+      <div class="modal-body">
+	<b>Enter the new name for the file <span id="renameoldname"></span></b><br>
+	<input type="text" id="newname" value="" onChange="validate('newname','rendirerror')">
+	<input type="hidden" id="oldpath" value="">
+	<div id="rendirerror"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onClick="confirm_rename()">Rename</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<!-- Modal -->
 <div class="modal fade" id="actionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -62,7 +85,8 @@
 
 <script>
 global_filter=[[2,0],[1,0]]
-global_path=""
+global_path="@b64path"
+
  function decode_base64(s) {
     var e={},i,k,v=[],r='',w=String.fromCharCode;
     var n=[[65,91],[97,123],[48,58],[43,44],[47,48]];
@@ -105,20 +129,22 @@ function load_dir(path)
 				}
 				
 				html+="</td>  <td>"+files[i].type+"</td> <td>"+files[i].size+"</td> <td style='text-align:center'> "
-				if (files[i].name!='..') {
+				if (files[i].mod) {
 					if (files[i].type=="file")
 						html+="<a href='/filemanager/download?base64_file="+files[i].link+"' target='_blank'><span class='badge'>Download</span></a>&nbsp;"
 
 					html+="<a href='javascript:void(0);' onClick='copy_file("+'"'+files[i].link+'","'+files[i].name+'"'+")'><span class='badge'>Copy</span></a> "
-					html+="<span class='badge'>Rename</span> "
+					html+="<a href='javascript:void(0);' onClick='rename_file("+'"'+files[i].link+'","'+files[i].name+'"'+")'><span class='badge'>Rename</span></a> "
 					html+="<a href='javascript:void(0);' onClick='delete_file("+'"'+files[i].link+'","'+files[i].name+'"'+")'><span class='badge alert-danger'>Delete</span></a> "
 				}
 				html+="</td></tr>"
 			}
+			header='<div class="panel panel-default">'
 			if (subdir!="")
-				header='<div class="panel panel-default"><a href="javascript:void(0);" onclick="load_dir('+"'"+subdir+"'"+')"><img src="/static/images/subfolder.png" width="18px"></a> Current Directory: '+decode_base64(path)+' </div>'
-			else
-				header=""
+				header+='<a href="javascript:void(0);" onclick="load_dir('+"'"+subdir+"'"+')"><img src="/static/images/subfolder.png" width="18px"></a>'
+			if (path!="")
+				header+='Current Directory: '+decode_base64(path)
+			header+=' </div>'
 			html+="</tbody></table>"
 			$("#DynTable").html(header+html)
 			//DOc : http://mottie.github.io/tablesorter/docs/
@@ -147,11 +173,32 @@ function load_dir(path)
 
 }
 
+function confirm_rename() 
+{
+	if (!validate('newname','rendirerror'))
+		return false
+	path=$("#oldpath").val()
+	newname=$("#newname").val()
+        $('#renameModal').modal('hide')	
+	send_command({'base64_path':path,'filename_newname':newname},'rename','File '+newname+' renamed')
+}
+
+
+function rename_file(path,name) {
+        $("#oldpath").val(path)
+        $("#newname").val(name)
+        $("#renameModal").modal()
+	$("#renameoldname").html(name)
+}
+
+
+
 $(document).ready(function() 
     {
 	$("#newdirbutton").click(new_dir)
 	$("#copybutton").click(copy_file_action)
 	$("#movebutton").click(move_file_action)
+	$("#uploadbutton").click(upload_file)
 	$("#resetbutton").click(function(event){
 		$("#dynselect")
 			.find('option')
@@ -159,12 +206,13 @@ $(document).ready(function()
 			.end()
 
 	});
-	load_dir('')
+	load_dir(global_path)
     } 
 ); 
 
 function show_result(action)
 {
+	update_history(action)
 	$('#dynaction').html(action)
 	$('#dynaction').show()
 	$('#dynaction').delay(5000).fadeOut()
@@ -199,6 +247,11 @@ function send_command(vars, action,msg,callback)
         },'json');
 }
 
+function update_history(msg)
+{
+	$("#actionresult").html(msg+"<br />"+$("#actionresult").html())
+}
+
 function confirm_delete()
 {
 	path=$("#deleteModalFileToDelete").val()
@@ -210,10 +263,9 @@ function confirm_delete()
 
 function new_dir()
 {
-	if (!validate())
+	if (!validate('newdir','validateerror'))
 		return false
 	send_command({'base64_path':global_path,'filename_dir':$("#newdir").val()},'createdir','Directory created',new_dir_end)
-	
 }
 
 function new_dir_end()
@@ -222,7 +274,7 @@ function new_dir_end()
        $("#validateerror").html("<span style='color:Green'>Directory created</span>")
 	$("#validateerror").show()
        $("#validateerror").delay(5000).fadeOut()
-	
+	update_history("Creation of directory "+$("#newdir").val())	
 
 }
 
@@ -260,9 +312,13 @@ function copy_mv_action(action)
 		
 		$.ajax({type: 'POST',async:true,url:'/filemanager',data:vars,success:function(data){
 			if (data.error==0) {
-				$("#actionresult").html(data.data.action+" "+data.data.src+" to "+data.data.dst+" [<span style='color:green'>OK</span>]<br />"+$("#actionresult").html())
+				update_history(data.data.action+" "+data.data.src+" to "+data.data.dst+" [<span style='color:green'>OK</span>]")
+				load_dir(global_path)
+				
+//				$("#actionresult").html(data.data.action+" "+data.data.src+" to "+data.data.dst+" [<span style='color:green'>OK</span>]<br />"+$("#actionresult").html())
 			} else {
-				$("#actionresult").html(data.action+" "+data.data.src+" to "+data.data.dst+"[<span style='color:red'>KO</span>] ("+data.errorstr+"("+data.error+")<br />"+$("#actionresult").html())
+				update_history(data.action+" "+data.data.src+" to "+data.data.dst+"[<span style='color:red'>KO</span>] ("+data.errorstr+"("+data.error+")")
+//				$("#actionresult").html(data.action+" "+data.data.src+" to "+data.data.dst+"[<span style='color:red'>KO</span>] ("+data.errorstr+"("+data.error+")<br />"+$("#actionresult").html())
 			}
 		},dataType:'json'});
                 this.remove();
@@ -298,28 +354,37 @@ function move_file_action()
         $("#actionModal").modal()
 }
 
-function validate()
+function validate(field,errorfield)
 {
+
+	
 	permit="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-."
-	field=$("#newdir").val()
+	field=$("#"+field).val()
 	
 	for(var i=0;i<field.length;i++) {
 		if (permit.indexOf(field[i])<0) {
-			$("#validateerror").html("<span style='color:red'>Error, char "+field[i]+" not valid</span>")
-		        $("#validateerror").show()
+			$("#"+errorfield).html("<span style='color:red'>Error, char "+field[i]+" not valid</span>")
+		        $("#"+errorfield).show()
 
 			return false	
 		}
 
 	}
-	$("#validateerror").html("")
+	$("#"+errorfield).html("")
 	
 	return true
 
 }
-
+function upload_file(event)
+{
+	$("#uploaddir").val(global_path)
+	$("#formupload").attr('action','/filemanager/upload?base64_path='+global_path)
+	$("#formupload").submit()
+}
 </script>
 <br />
+
+
 <div class="panel panel-info" style="width: 80%;margin: auto">
                         <div class="panel-heading">
                                   <h3 class="panel-title">Operations</h3>
@@ -327,7 +392,7 @@ function validate()
                  	<div class="panel-body" style="margin: auto;text-align:center;"><center>
 			<table border="0" style="text-align: center">
                         <tr>
-                                <td><input type="text" id="newdir" onChange="validate()"></td>
+                                <td><input type="text" id="newdir" onChange="validate('newdir','validateerror')"></td>
                                 <td><button class="btn btn-danger btn-lg" id="newdirbutton" >Create Dir</button></td>
                         </tr>
 			<tr>
@@ -344,6 +409,20 @@ function validate()
 				    <button class="btn btn-danger btn-lg" id="movebutton">Move</button><br /><br />
 				    <button class="btn btn-success btn-lg" id="resetbutton">Reset</button>
 				</td>
+			</tr>
+			<tr>
+				<td><form id="formupload" enctype="multipart/form-data" method="POST" >
+					<input id="fileupload" type="file" name="upload" >
+					<input type="hidden" name="alphanum_token" value="@token">
+					<input type="hidden" name="base64_path" value="" id="uploaddir">
+				    </form>
+				</td>
+				<td>
+					<button class="btn btn-info btn-lg" id="uploadbutton" >Upload</button>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2"><div id="dynfileupload"></div></td>
 			</tr>
 			</table>
 			</center>

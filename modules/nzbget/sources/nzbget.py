@@ -21,12 +21,13 @@ class NzbGet:
 		return self._tmpfiles
 
         def get_format_size(self,number):
+		number=float(number)
                 extension = [ 'b', 'Kb', 'Mb','Gb' ]
                 for i in range(len(extension)):
                         if number/1024<1:
                                 return str(round(number,2))+ " " + extension[i]
                         else:
-                                number=number/1024+0.0
+                                number=number/1024
 		return str(round(number*1024,2))+" "+"Gb"
 
 
@@ -59,8 +60,8 @@ class NzbGet:
 
 		for i in range(len(result)):
 			result[i]['RemainingSizeLoFormated']=self.get_format_size(result[i]['RemainingSizeLo'])
-			result[i]['FileSizeLoFormated']=self.get_format_size(result[i]['FileSizeLo'])
-			result[i]['DownloadedFormated']=self.get_format_size(result[i]['FileSizeLo']-result[i]['RemainingSizeLo'])
+			result[i]['FileSizeLoFormated']=self.get_format_size(result[i]['FileSizeMB']*1024*1024)
+			result[i]['DownloadedFormated']=self.get_format_size((result[i]['FileSizeMB']-result[i]['RemainingSizeMB'])*1024*1024)
 		return (0,result)
 
 	def get_history(self):

@@ -17,7 +17,8 @@ class WebManager(WebStructure.WebAbstract):
 				'createdir':{'ptr':self.create_dir,'args':['base64_path','filename_dir']},
 				'delete':{'ptr':self.delete_file,'args':['base64_path']},
 				'copy':{'ptr':self.copy_file,'args':['base64_src','base64_dst']},
-				'move':{'ptr':self.move_file,'args':['base64_src','base64_dst']}
+				'move':{'ptr':self.move_file,'args':['base64_src','base64_dst']},
+				'rename':{'ptr':self.rename_file,'args':['base64_path','filename_newname']}
 				}
 
 
@@ -27,6 +28,19 @@ class WebManager(WebStructure.WebAbstract):
 
 	def copy_file(self,post):
 		return self.move_file(post,True)
+
+
+	def rename_file(self,post):
+		path=self._filemanager.path_decode(post['base64_path'])
+		if not self._filemanager.validate_path(path):
+			return self._return({},1001,'Invalid path')
+		basepath=os.path.dirname(os.path.abspath(path))
+		filename=post['filename_newname']
+		newname=basepath+'/'+filename
+		error=self._filemanager.file_rename(path,newname)
+
+                return self._return({},error,self._filemanager.get_error(error))
+		
 
 	def move_file(self,post,copy=False):
                 src=self._filemanager.path_decode(post['base64_src'])
@@ -83,6 +97,7 @@ class WebManager(WebStructure.WebAbstract):
 			tmp['link']=f['link']
 			tmp['type']='dir'
 			tmp['size']=''
+			tmp['mod']=f['mod']
 			completefile.append(tmp)
 
 		for f in files:
@@ -91,6 +106,7 @@ class WebManager(WebStructure.WebAbstract):
                         tmp['link']=f['link']
                         tmp['type']='file'
                         tmp['size']=f['size']
+			tmp['mod']=True
 			completefile.append(tmp)
 
 		return self._return(completefile)
@@ -111,6 +127,27 @@ class WebManager(WebStructure.WebAbstract):
 		return WebStructure.HttpContext(statuscode=503,content={'page':http_context.url},template='503.tpl',mimetype='text/html')
 
 
+	def file_upload(self,post):
+		path=self._filemanager.path_decode(post['base64_path'])
+		
+		if not self._filemanager.validate_path(path):
+			return (1001,'Path not valid')
+
+		try:
+			dst = open(path+'/'+post['filename_upload'], "wb")
+			src=post['file_upload']
+			
+                        byte = src.read(4*1024*1024)
+			while byte != "":
+				dst.write(byte)
+                                byte = src.read(4*1024*1024)
+		except:
+                        return (1002,'Error writing files')
+		
+		dst.close()
+		src.close()
+		return (0,'Upload Ok')
+
 	def get_html(self,http_context):
 		template=['header.tpl','filemanager/filemanager.tpl','footer.tpl']
                 sessionid=http_context.sessionid
@@ -124,6 +161,11 @@ class WebManager(WebStructure.WebAbstract):
 
 		if http_context.suburl=='download' and 'base64_file' in get.keys():
 			return self.file_download(get['base64_file'])
+		
+		if http_context.suburl=='upload' and 'file_upload' in post.keys() and 'filename_upload' in post.keys() and 'base64_path' in post.keys():
+			(error,action)=self.file_upload(post)
+			if error!=0:
+				errorstr=action
 
 		if 'alphanum_action' in post.keys():
 			action=post['alphanum_action']
@@ -135,13 +177,18 @@ class WebManager(WebStructure.WebAbstract):
 					if item not in post.keys():
 						return self._return(None,1001,'Missing argument')
 				return ptr(post)
-				
 
 
-		content={'includefile':'filemanager/headerfilemanager.html','token':sessionvars['posttoken']}
-
-
+		b64path=""
+		if 'base64_path' in http_context.http_get.keys():
+			b64path=http_context.http_get['base64_path']
+			if not self._filemanager.validate_path(self._filemanager.path_decode(b64path)):
+				b64path=""
+		if b64path=="":
+			b64path=self._filemanager.get_base_path(True)	
+		content={'error':error,'errorstr':errorstr,'action':action,'b64path':b64path,'includefile':'filemanager/headerfilemanager.html','token':sessionvars['posttoken']}
 		return WebStructure.HttpContext(statuscode=200,content=content,template=template,mimetype='text/html')
+
 
         def get_module_name(self):
                 return "FileManager"
