@@ -1,3 +1,17 @@
+#---------------------------------------------------------------------------------------------
+#-
+#- WebStructure.py
+#- ---------------
+#-
+#- Mini object used to pass variables from main to modules raspadmin
+#-
+#- Author : Erwan Niquet
+#- Date : Jan 2014
+#- Part of raspadmin project, an Admin interface for raspberry pi
+#-
+#--------------------------------------------------------------------------------------------
+
+
 class HttpContext:
 	def __init__(self,**kwds):
 		self.__dict__.update(kwds)

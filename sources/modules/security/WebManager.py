@@ -1,9 +1,29 @@
+#---------------------------------------------------------------------------------------------
+#-
+#- Security module
+#- ---------------
+#-
+#- Check vars and post token (used for protection against csrf attacks
+#-
+#- Author : Erwan Niquet
+#- Date : Jan 2014
+#- Part of raspadmin project, an Admin interface for raspberry pi
+#-
+#--------------------------------------------------------------------------------------------
+
+# -------------
+# Import lib
+# -------------
 from .. import WebStructure 
 from ..HttpAlert import httpalert
 import mimetypes
 import os
 import security
 
+
+# -------------
+# Main object
+# -------------
 class WebManager(WebStructure.WebAbstract):
 	def __init__(self,webconf):
 		self._webconf=webconf
