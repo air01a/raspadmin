@@ -1,3 +1,22 @@
+#---------------------------------------------------------------------------------------------
+#-
+#- status.py
+#- ---------------
+#-
+#- Get system information to display on status page
+#-
+#- Author : Erwan Niquet
+#- Date : Jan 2014
+#- Part of raspadmin project, an Admin interface for raspberry pi
+#-
+#--------------------------------------------------------------------------------------------
+
+# -------------
+# Import lib
+# -------------
+
+
+
 import psutil
 import subprocess
 import socket

@@ -1,3 +1,21 @@
+#---------------------------------------------------------------------------------------------
+#-
+#- Login module
+#- ---------------
+#-
+#- Manage authentication of users
+#-
+#- Author : Erwan Niquet
+#- Date : Jan 2014
+#- Part of raspadmin project, an Admin interface for raspberry pi
+#-
+#--------------------------------------------------------------------------------------------
+
+# -------------
+# Import lib
+# -------------
+
+
 from .. import WebStructure 
 from ..HttpAlert import httpalert
 import os

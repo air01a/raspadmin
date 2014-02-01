@@ -5,6 +5,7 @@ window.onload = function() {
 		      auth: jsonauth,
 		      autoConnectURL: "ssh://pi\@@autoconnect:22",
                       fillContainer:true,
+		      theme: 'white',
                       colors:'gnome-terminal'});
 	}
 </script>

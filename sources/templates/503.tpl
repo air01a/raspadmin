@@ -4,7 +4,7 @@
         <link href="/static/css/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
 </head>
 <body>
-<h1 style="text-align:center;color: white;">RaspAdmin - Not Found</h1>
+<h1 style="text-align:center;color: white;">RaspAdmin - Forbidden</h1>
 
 <p class="notfound">
 <img src="/static/images/error.png" width="100px"><br>Erreur, RaspAdmin has not the right to view @page

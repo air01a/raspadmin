@@ -1,3 +1,21 @@
+#---------------------------------------------------------------------------------------------
+#-
+#- Status module
+#- ---------------
+#-
+#- Display the status page
+#-
+#- Author : Erwan Niquet
+#- Date : Jan 2014
+#- Part of raspadmin project, an Admin interface for raspberry pi
+#-
+#--------------------------------------------------------------------------------------------
+
+# -------------
+# Import lib
+# -------------
+
+
 from .. import WebStructure 
 import status
 
