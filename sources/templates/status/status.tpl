@@ -80,21 +80,21 @@ window.onload = function () {
 <script type="text/javascript">
 function initHTTPGraphchart52()
 {
-            var chart52 = new RGraph.Pie('chart52', [@memory.usedraw,@memory.freeraw,@memory.bufferraw])
+            var chart52 = new RGraph.Pie('chart52', [@memory.usedraw,@memory.freeraw,@memory.bufferraw,@memory.cachedraw])
                 .Set('strokestyle', 'white')
-                .Set('colors', ['red','green','#31B404'])
+                .Set('colors', ['red','green','#31B404','#00FF00'])
                 .Set('linewidth', 3)
                 .Set('exploded', 10)
                 .Set('shadow', true)
                 .Set('shadow.offsetx', 0)
                 .Set('shadow.offsety', 0)
                 .Set('shadow.blur', 20)
-                .Set('labels', ['Used','Free','Buffer'])
-		.Set('tooltips', ['Used','Free','Buffer'])
+                .Set('labels', ['Used','Free','Buffer','Cached'])
+		.Set('tooltips', ['Used','Free','Buffer','Cached'])
                 .Set('labels.sticks', [true])
                 .Set('labels.sticks.length', 0)
                 .Set('chart.labels.ingraph',true)
-		.Set('chart.labels.ingraph.specific', ['@memory.used','@memory.free','@memory.buffers'])
+		.Set('chart.labels.ingraph.specific', ['@memory.used','@memory.free','@memory.buffers','@memory.cached'])
  
            RGraph.Effects.Pie.RoundRobin(chart52)
 
@@ -194,8 +194,6 @@ HttpGraphId.push(initHTTPGraphLoadAvg)
 
 
 </script>
-
-
 <div class="panel panel-success" style="width: 80%;margin: auto">
                         <div class="panel-heading">
                                   <h3 class="panel-title">Load Average</h3>

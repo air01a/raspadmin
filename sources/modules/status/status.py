@@ -1,22 +1,3 @@
-#---------------------------------------------------------------------------------------------
-#-
-#- status.py
-#- ---------------
-#-
-#- Get system information to display on status page
-#-
-#- Author : Erwan Niquet
-#- Date : Jan 2014
-#- Part of raspadmin project, an Admin interface for raspberry pi
-#-
-#--------------------------------------------------------------------------------------------
-
-# -------------
-# Import lib
-# -------------
-
-
-
 import psutil
 import subprocess
 import socket
@@ -77,8 +58,11 @@ def getMemory():
 	total = getDisplayValue(memory.total)
 	available = getDisplayValue(memory.available)
 	availableraw=memory.available
-	used = getDisplayValue(memory.used)
-	usedraw = memory.used
+        cached=getDisplayValue(memory.cached)
+        cachedraw=memory.cached
+
+	used = getDisplayValue(memory.total-memory.available)
+	usedraw = memory.total-memory.available
 	percent = int(memory.percent)
 	buffers = getDisplayValue(memory.buffers)
 	bufferraw = memory.buffers
@@ -89,8 +73,8 @@ def getMemory():
         swused = getDisplayValue(memory.used)
         swpercent = int(memory.percent)
 	swfree = getDisplayValue(memory.free)
-	
-	return {'usedraw':usedraw,'bufferraw':bufferraw,'freeraw':freeraw,'total':total,'available':available,'used':used,'percent':percent,'buffers':buffers,'free':free,'swfree':swfree,'swtotal':swtotal,'swpercent':swpercent}
+
+	return {'cached':cached,'cachedraw':cachedraw,'usedraw':usedraw,'bufferraw':bufferraw,'freeraw':freeraw,'total':total,'available':available,'used':used,'percent':percent,'buffers':buffers,'free':free,'swfree':swfree,'swtotal':swtotal,'swpercent':swpercent}
 	
 def getUptime(text=False):
 	bt=int(time.time()-psutil.get_boot_time())
