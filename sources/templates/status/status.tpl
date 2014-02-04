@@ -196,7 +196,7 @@ HttpGraphId.push(initHTTPGraphLoadAvg)
 </script>
 <div class="panel panel-success" style="width: 80%;margin: auto">
                         <div class="panel-heading">
-                                  <h3 class="panel-title">Load Average</h3>
+                                  <h3 class="panel-title">Load Average 1 / 5 / 15 minutes</h3>
                         </div>
                  <div class="panel-body" style="margin: auto;text-align:center;">
 	 <canvas id="loadvg1" width="250" height="170" style="display: inline">[No canvas support]</canvas>
