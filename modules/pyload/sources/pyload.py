@@ -110,6 +110,17 @@ class PyLoad:
 		return self.get_api('restartFile',vars)
 
 
+	def getCaptcha(self):
+		vars={}
+		if not self.get_api('isCaptchaWaiting',vars):
+			return False
+
+		return self.get_api('getCaptchaTask',vars)
+
+	def setCaptcha(self,tid,value):
+		vars={'tid':json.dumps(tid),'result':json.dumps(value)}
+		return self.get_api('setCaptchaResult',vars);
+
 	def delete_file(self,fid):
 		vars={'fids':json.dumps([fid])}
 		return self.get_api('deleteFiles',vars)

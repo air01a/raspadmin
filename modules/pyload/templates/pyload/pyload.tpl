@@ -69,6 +69,40 @@ function packageaction(id,action){
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal  -->
+
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="idCaptcha" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel" style="color:blue;"> Captcha needed</h4>
+      </div>
+      <div class="modal-body">
+        <div id="captcha">
+        </div>
+	<form method="POST" action="">
+		<input type="hidden" value="" name="id_tid" id="id_tid">
+		<input type="hidden" name="alphanum_token" value="@token">
+		<input type="hidden" name="alphanum_action" value="setcaptcha" >
+		<input type="text" name="str_captcha" value=""> 
+		<input type="submit" value="Validate">
+	</form>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal  -->
+
+
+
+
 <form id="dynform" method="post">
 <input type="hidden" name="alphanum_token" value="@token">
 <input type="hidden" id="id_fid" name="id_fid" value="">
@@ -94,6 +128,23 @@ function postaction(fid,pid,action)
 
 }
 
+
+function getCaptcha()
+{
+	$.post("API",{ "alphanum_token": "@token","alphanum_action": "getcaptchatask"}, function( data ) {
+		if (data.error==0) {
+			console.log(data)
+			if (data.result.tid!=-1)
+			{
+				$("#captcha").html('<img src="data:image/'+data.result.type+';base64,'+data.result.data+'">')
+				$("#idCaptcha").modal('show');
+				$("#id_tid").val(data.result.tid);
+			}
+			setTimeout("getCaptcha()",10000);
+		
+		}
+	},"json");
+}
 
 function refreshfile(fid,pid)
 {
@@ -125,7 +176,12 @@ function showPackageData(pid)
 
 }
 </script>
+<script>
+$( document ).ready(function() {
+	setTimeout("getCaptcha()",5000);
+});
 
+</script>
 <br />
 <div class="panel panel-primary" style="width: 80%;margin: auto">
                         <div class="panel-heading">
