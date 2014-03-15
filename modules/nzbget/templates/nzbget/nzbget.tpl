@@ -37,8 +37,6 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
-
 <br /><div class="panel panel-primary" style="width: 80%;margin: auto">
 		        <div class="panel-heading">
 			          <h3 class="panel-title">Information</h3>
@@ -90,10 +88,32 @@
 <input type="hidden" name="id_id" value="" id="iddelete">
 </form>
 <script>
+actionInProgress=0
 function deletepackage(id) {
 	$("#iddelete").val(id)
 	$("#dyn").submit()
 }
+
+$('#idadddownload').on('show.bs.modal', function (e) {
+	actionInProgress=1
+})
+
+$('#idadddownload').on('hide.bs.modal', function (e) {
+        actionInProgress=0
+})
+
+
+function reload() {
+	if (actionInProgress==0){
+		location.reload()
+	}
+
+}
+
+$( document ).ready(function() {
+	window.setInterval(reload, 60000);
+});
+
 </script>
 <div class="panel panel-danger" style="width: 80%;margin: auto">
                         <div class="panel-heading">
