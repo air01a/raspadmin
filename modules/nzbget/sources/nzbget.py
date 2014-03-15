@@ -37,7 +37,7 @@ class NzbGet:
 		except:
 			return (1,None)
 		result['DownloadRateFormated']=self.get_format_size(result['DownloadRate'])
-		result['RemainingSizeLoFormated']=self.get_format_size(result['RemainingSizeLo'])
+		result['RemainingSizeLoFormated']=self.get_format_size(result['RemainingSizeMB']*1024*1024)
 		result['DownloadedSizeLoFormated']=self.get_format_size(result['DownloadedSizeMB']*1024*1024)
 		#| bug with DownloadedSizeLo that does not show the correct value???
 		result['AverageDownloadRateFormated']=self.get_format_size(result['AverageDownloadRate'])
