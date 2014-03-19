@@ -1,5 +1,11 @@
 #if (@isActive==0)
 &nbsp;<a href="/picam/start/"><button type="button" class="btn btn-success btn-lg" data-dismiss="modal">Start</button></a>
+<script>
+function webservice(action,value) {
+
+}
+</script>
+
 #else
 <a href="/picam/stop/">
 &nbsp;<button type="submit" class="btn btn-danger btn-lg">Stop</button>
@@ -28,6 +34,10 @@ $(document).ready(function() {
 });
 </script>
 #end
+
+
+
+
 <div class="panel panel-success" style="width: 80%;margin: auto">
                         <div class="panel-heading">
                                   <h3 class="panel-title">PiCamera</h3>
@@ -40,9 +50,17 @@ $(document).ready(function() {
 			&nbsp;&nbsp;&nbsp;
                         <button type="button" class="btn btn-primary btn-lg" data-dismiss="modal" onclick="webservice('exposure_inc','')">Exp +</button>
                         <button type="button" class="btn btn-primary btn-lg" data-dismiss="modal" onclick="webservice('exposure_dec','')">Exp -</button>
-
+			<br /><br /> 
+			#if (@manageServoX=="1")
+				<button type="button" class="btn btn-danger btn-lg" data-dismiss="modal" onclick="webservice('movex_dec','')"><<</button>
+				&nbsp;&nbsp;&nbsp;
+				<button type="button" class="btn btn-danger btn-lg" data-dismiss="modal" onclick="webservice('movex_inc','')">>></button>
+			#end
 		</div>
+
+		
 </div>
+@manageServoX
 <br />
 <div class="alert alert-danger" id="error"></div>
 <script>

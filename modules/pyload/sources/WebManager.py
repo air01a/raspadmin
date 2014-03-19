@@ -27,11 +27,13 @@ class WebManager(WebStructure.WebAbstract):
 			return (action,error,status)
 
 		if action == "startservice":
+			status=0
 			error=self._pyload.start_process()
 			action="Service Started"
 			return (action,error,status)
 
 		if action == "stopservice":
+			status=0
                         error=self._pyload.stop_process()
                         action="Service Stopped"
                         return (action,error,status)
