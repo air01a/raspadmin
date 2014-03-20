@@ -77,7 +77,10 @@ def getMemory():
 	return {'cached':cached,'cachedraw':cachedraw,'usedraw':usedraw,'bufferraw':bufferraw,'freeraw':freeraw,'total':total,'available':available,'used':used,'percent':percent,'buffers':buffers,'free':free,'swfree':swfree,'swtotal':swtotal,'swpercent':swpercent}
 	
 def getUptime(text=False):
-	bt=int(time.time()-psutil.get_boot_time())
+	try:
+		bt=int(time.time()-psutil.boot_time())
+	except:
+		bt=0
 	if not text:
 		return bt
 	day=int(bt/86400)
