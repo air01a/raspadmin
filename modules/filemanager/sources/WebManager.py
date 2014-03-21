@@ -1,6 +1,5 @@
 from .. import WebStructure 
 import status
-import pyload
 import json
 from ..lib import FileManager
 import ConfigParser
