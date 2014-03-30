@@ -88,8 +88,8 @@ if [ "$pip" == "1" ]; then
 	apt-get install python-pip
 fi
 
-if [ "$pip" == "1" ]; then
-        echo "Installing pip"
+if [ "$dev" == "1" ]; then
+        echo "Installing python-dev"
         apt-get install python-dev
 
 fi
