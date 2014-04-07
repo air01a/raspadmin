@@ -59,7 +59,6 @@ class SessionManager:
 		C['RASPSESSION']=sessionid
 		C['RASPSESSION']["path"] = "/"
 		C['RASPSESSION']['expires'] = 86400
-		C['RASPSESSION']['secure'] = '1'
 		if SSL=='yes':
 			C['RASPSESSION']['secure'] = '1'
 		C['RASPSESSION']['httponly']='1'
