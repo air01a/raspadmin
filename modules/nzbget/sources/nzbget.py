@@ -80,6 +80,7 @@ class NzbGet:
 				else:
 					status="Failed"
 			result[i]['status']=status	
+			result[i]['DestDir']=result[i]['DestDir'].split('/')[-1]
 		
 		if len(result)>10:
 			result=result[0:10]

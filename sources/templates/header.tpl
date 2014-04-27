@@ -38,40 +38,13 @@
 				<div class="container">
 					<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a>
 					<a href="index.php" class="brand" style="font-weight: 600;"><img src="/static/images/sprite.png" alt="rpi"/>&nbsp;<span class="bold">Raspberry Pi</span> Admin</a>
-					<div class="nav-collapse collapse">
-						<ul class="nav pull-right">
-								<a href="/?num_logout=1"><img src="/static/images/user.jpg" alt="" class="nav-user-pic" />Logout
-								</a>
-						</ul>
-
-						<!-- Notifications -->
-						<!--<ul class="nav pull-right">
-							<li class="dropdown dropdown-big">
-								<a class="dropdown-toggle" href="#" data-toggle="dropdown">
-									<i class="icon-user"></i> Users <span   class="badge badge-success">2</span>
-								</a>
-								<ul class="dropdown-menu">
-									<li><h5><i class="icon-user"></i> Users</h5><hr /></li>
-									<li>
-										<a href="#">Ravi Kumar</a> <span class="label label-warning pull-right">Free</span>
-										<div class="clearfix"></div>
-										<hr />
-									</li>
-									<li>
-										<a href="#">Balaji</a> <span class="label label-important pull-right">Premium</span>
-										<div class="clearfix"></div>
-										<hr />
-									</li>
-									<li><div class="drop-foot"><a href="#">View All</a></div></li>
-								</ul>
-							</li>
-						</ul>-->
 					</div>
 				</div>
 			</div>
 		</div>
 
 		<!-- Main content starts -->
+#if (!@NONAV)
 		<div class="content">
 			<!-- Sidebar -->
 			<div class="sidebar">
@@ -90,6 +63,10 @@
 			</div>
 			<!-- Sidebar ends -->
 <div class="mainbar">
+#else
+<div class="mainbar" style="margin-left: 0px;">
+#end
+
 <br><h1>@pagetitle</h1>
 <hr />
 #if (@error)

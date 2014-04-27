@@ -777,6 +777,15 @@ form label{
 	min-height: 900px;
 }
 
+.manbar2{
+        position: relative;^M
+	margin-left: 0px;
+        margin-right: 0px;^M
+        width: auto;^M
+        background:#fff;^M
+        min-height: 900px;^M
+}
+
 .mainbar .container{
 	width: 100%;
 	padding: 0px !important

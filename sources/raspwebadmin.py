@@ -41,7 +41,7 @@ from modules.SessionManager import SessionManager
 # ----------------------------
 class HttpRequestHandler(BaseHTTPRequestHandler):
     # Vars
-    _debug = False # Set it to True if you want to debug
+    _debug = True # Set it to True if you want to debug
     # Override default value for server header
     server_version = 'raspadmin v1.0'
     sys_version = '- Python let you guess -'
@@ -75,7 +75,6 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
     def renderer(self,title,http_response,extraheaders):
 	self.send_response(http_response.statuscode)
 	self.send_header('Content-type',http_response.mimetype)
-
         if hasattr(http_response,'lastmodified'):
                 self.send_header('Last-Modified',self.date_time_string(http_response.lastmodified))
         else:
@@ -163,9 +162,10 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
 	if not sessionid:
 		sessionid,cookie=sessionmanager.create(configreader.webconf['usessl'])
 		extraheaders.append(cookie)
+
 	
 	# Create the http context to send to the module
-        http_context=HttpContext(http_get=http_get,http_post=http_post,url=url,suburl=suburl,ipclient=ipclient, cookies=http_cookies, sessionid=sessionid, session=sessionmanager, module=module,servername=self.headers.get('Host'))
+        http_context=HttpContext(http_get=http_get,http_post=http_post,url=url,suburl=suburl,ipclient=ipclient, cookies=http_cookies, sessionid=sessionid, session=sessionmanager, module=module,servername=self.headers.get('Host'), module_manager=moduleManager)
 
 	# Check if there is required module to go through
 	for requiredmodule in moduleManager.getrequiredmodules():
@@ -183,10 +183,16 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
 	# Send the module
 	# Pass the response to the renderer function
 	try:
+		
 		http_response=moduleManager.getmodule(module).get_html(http_context)
+
 	except Exception, e:
                 self.internalerror(error="Erreur while handling the requested module\n")
 		return
+
+	if http_response.template != None and http_response.content!=None and 'API' in sessionmanager.get_vars(sessionid).keys():
+		http_response.content['NONAV']=True
+
 	self.renderer(moduleManager.getmodule(module).get_module_name(),http_response,extraheaders)
 
 

@@ -122,7 +122,6 @@ $( document ).ready(function() {
 			<table class="table table-striped">
 			<tr>
 				<th>Name</th>
-				<th>Destination</th>
 				<th>Health</th>
 				<th>Downloaded</th>
 				<th>Action</th>
@@ -130,7 +129,6 @@ $( document ).ready(function() {
 #for @dwn in @listgroups:
 			<tr>
 				<td>@dwn.NZBNicename</td>
-				<td>@dwn.DestDir</td>
 				<td>@dwn.Health (critical=@dwn.CriticalHealth)</td>
 				<td><span style="color: green">@dwn.DownloadedFormated </span>/ <span style="color: red">@dwn.FileSizeLoFormated</td>
 				<td><button class="btn btn-danger" onClick="deletepackage('@dwn.LastID')">Delete</button></td>
@@ -176,14 +174,12 @@ $( document ).ready(function() {
                         <table class="table table-striped">
                         <tr>
                                 <th>Name</th>
-				<th>Dir</th>
 				<th>Size</th>
                                 <th>Status</th>
                         </tr>
 #for @dwn in @history:
                         <tr>
                                 <td>@dwn.NZBNicename</td>
-                                <td>@dwn.DestDir</td>
 				<td>@dwn.FileSizeLoFormated</td>
 				<td><span style="color:#if (@dwn.status=="Success") green #else red #end">@dwn.status</span></td>
                         </tr>

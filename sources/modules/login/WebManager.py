@@ -1,32 +1,15 @@
-#---------------------------------------------------------------------------------------------
-#-
-#- Login module
-#- ---------------
-#-
-#- Manage authentication of users
-#-
-#- Author : Erwan Niquet
-#- Date : Jan 2014
-#- Part of raspadmin project, an Admin interface for raspberry pi
-#-
-#--------------------------------------------------------------------------------------------
-
-# -------------
-# Import lib
-# -------------
-
-
 from .. import WebStructure 
 from ..HttpAlert import httpalert
 import os
 import pam
+import json
 
 class WebManager(WebStructure.WebAbstract):
 	def __init__(self,webconf):
 		self._webconf=webconf
 
 	def get_html(self,http_context):
-		no_auth=['.jpg','.png','.css','.ico']
+		no_auth=['.jpg','.png','.css','.ico','.htm']
 		
 		if http_context.module=='static' and (http_context.url[-4:] in no_auth):
 			return None
@@ -53,7 +36,16 @@ class WebManager(WebStructure.WebAbstract):
 			else:
 				error='Wrong credentials'
 		token=sessionvars['posttoken']
-		return WebStructure.HttpContext(statuscode=200,content={'page':http_context.url,'error':error,'token':token},template='login.tpl',mimetype='text/html')
+	
+		content={'page':http_context.url,'error':error,'token':token}
+		if 'alphanum_json' in http_context.http_get.keys():
+			template=None
+			content=json.dumps(content)
+			http_context.session.add_var(sessionid,'API',True)
+		else:
+			template='login.tpl'
+
+		return WebStructure.HttpContext(statuscode=200,content=content,template=template,mimetype='text/html')
 
 	def is_required(self):
 		return True
