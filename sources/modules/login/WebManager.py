@@ -19,10 +19,15 @@ class WebManager(WebStructure.WebAbstract):
 			http_context.session.del_var(sessionid,'CONNECTED')
 
 		error=''
+		connected=False
 		sessionvars=http_context.session.get_vars(sessionid)
 
 		if 'CONNECTED' in sessionvars.keys():	
-			return None
+			if not 'alphanum_json' in http_context.http_get.keys():
+				return None
+			else:
+				connected=True
+                                error='No Error'
 
 		http_post=http_context.http_post
 		http_post_varlist=http_post.keys()
@@ -32,12 +37,16 @@ class WebManager(WebStructure.WebAbstract):
 			if http_post['alphanum_login'] in allowedlogin and pam.authenticate(http_post['alphanum_login'],http_post['str_password'], loginmodule):
 				http_context.session.add_var(sessionid,'CONNECTED',True)
 				http_context.session.add_var(sessionid,'user',http_post['alphanum_login'])
-				return None
+
+				if not 'alphanum_json' in http_context.http_get.keys():
+					return None
+				connected=True
+				error='No Error'
 			else:
 				error='Wrong credentials'
 		token=sessionvars['posttoken']
 	
-		content={'page':http_context.url,'error':error,'token':token}
+		content={'page':http_context.url,'error':error,'token':token,'connected':connected}
 		if 'alphanum_json' in http_context.http_get.keys():
 			template=None
 			content=json.dumps(content)

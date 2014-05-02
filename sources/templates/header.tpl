@@ -33,6 +33,7 @@
 </style>
 	</head>
 	<body>
+#if (!@NONAV)
 		<div class="navbar navbar-fixed-top navbar-inverse">
 			<div class="navbar-inner">
 				<div class="container">
@@ -44,7 +45,6 @@
 		</div>
 
 		<!-- Main content starts -->
-#if (!@NONAV)
 		<div class="content">
 			<!-- Sidebar -->
 			<div class="sidebar">
@@ -64,7 +64,7 @@
 			<!-- Sidebar ends -->
 <div class="mainbar">
 #else
-<div class="mainbar" style="margin-left: 0px;">
+<div class="mainbar" style="margin-left: 0px;min-height: 900px">
 #end
 
 <br><h1>@pagetitle</h1>
