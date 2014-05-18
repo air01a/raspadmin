@@ -1,5 +1,5 @@
 #if (@isActive==0)
-&nbsp;<a href="/picam/start/"><button type="button" class="btn btn-success btn-lg" data-dismiss="modal">Start</button></a>
+&nbsp;<a href="/picam/start"><button type="button" class="btn btn-success btn-lg" data-dismiss="modal">Start</button></a>
 <script>
 function webservice(action,value) {
 
@@ -14,7 +14,7 @@ function webservice(action,value) {
 
 function loadImage(){
 	result=$.get("/picam/getimage",function(data){
-                $('#capture').html('<img src="data:image/jpg;base64,' + data.image + '" />');
+                $('#capture').attr('src',"data:image/jpg;base64," + data.image);
         },"json");
 }
 
@@ -43,7 +43,7 @@ $(document).ready(function() {
                                   <h3 class="panel-title">PiCamera</h3>
                         </div>
                  <div class="panel-body" style="margin: auto;text-align:center;">
-			<div id="capture">No capture</div>
+			<div style="height: 480px;width: 600px;margin: auto;"><img src="/static/images/nocapture.png" id="capture"></div>
 			<br />
 			<button type="button" class="btn btn-success btn-lg" data-dismiss="modal" onclick="webservice('light_inc','')">Bri +</button>
 			<button type="button" class="btn btn-success btn-lg" data-dismiss="modal" onclick="webservice('light_dec','')">Bri -</button>
