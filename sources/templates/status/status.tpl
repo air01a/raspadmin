@@ -241,9 +241,9 @@ HttpGraphId.push(initHTTPGraphLoadAvg)
 <table class="bordered" style="width: 80%;margin: auto">
     <thead>
     <tr>
-       <th>MountPoint</th>
+       <th>Mount Point</th>
        <th>Device</th>
-       <th>FsType</th>
+       <th>Fs Type</th>
        <th>Total (Gb)</th>
        <th>Free</th>
        <th>Used</th>

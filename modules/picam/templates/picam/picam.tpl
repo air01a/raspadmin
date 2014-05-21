@@ -43,7 +43,7 @@ $(document).ready(function() {
                                   <h3 class="panel-title">PiCamera</h3>
                         </div>
                  <div class="panel-body" style="margin: auto;text-align:center;">
-			<div style="height: 480px;width: 600px;margin: auto;"><img src="/static/images/nocapture.png" id="capture"></div>
+			<div style="margin: auto"><img style="max-width: 80%" src="/static/images/nocapture.png" id="capture"></div>
 			<br />
 			<button type="button" class="btn btn-success btn-lg" data-dismiss="modal" onclick="webservice('light_inc','')">Bri +</button>
 			<button type="button" class="btn btn-success btn-lg" data-dismiss="modal" onclick="webservice('light_dec','')">Bri -</button>

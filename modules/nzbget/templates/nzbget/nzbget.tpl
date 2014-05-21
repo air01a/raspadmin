@@ -115,7 +115,7 @@ $( document ).ready(function() {
 });
 
 </script>
-<div class="panel panel-danger" style="width: 80%;margin: auto">
+<div class="panel panel-danger wordbreak" style="width: 80%;margin: auto">
                         <div class="panel-heading">
                                   <h3 class="panel-title">Current Download</h3>
                         </div>
@@ -140,7 +140,7 @@ $( document ).ready(function() {
 		 </div>
 </div>
 <br />
-<div class="panel panel-info" style="width: 80%;margin: auto">
+<div class="panel panel-info wordbreak" style="width: 80%;margin: auto">
                         <div class="panel-heading">
                                   <h3 class="panel-title">Post Queue</h3>
                         </div>
@@ -167,7 +167,7 @@ $( document ).ready(function() {
 </div>
 
 <br />
-<div class="panel panel-success" style="width: 80%;margin: auto">
+<div class="panel panel-success wordbreak" style="width: 80%;margin: auto">
                         <div class="panel-heading">
                                   <h3 class="panel-title">History</h3>
                         </div>
