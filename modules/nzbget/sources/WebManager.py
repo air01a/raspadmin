@@ -102,6 +102,8 @@ class WebManager(WebStructure.WebAbstract):
 			listgroups=[]
 			postqueue=[]
 			history=[]
+		
+
 		if error==0:
 			error=error1
 		else:
@@ -110,6 +112,8 @@ class WebManager(WebStructure.WebAbstract):
 		errorstr=self._nzbget.get_error_str(error)
 		token=sessionvars['posttoken']
 		content={'token':token,'status':status,'listgroups':listgroups,'error':error,'errorstr':errorstr,'action':action,'postqueue':postqueue,'history':history}
+		if http_context.suburl=='getstatus':
+			return WebStructure.HttpContext(statuscode=200,template=None, content=json.dumps(content),mimetype='text/html')
 		return WebStructure.HttpContext(statuscode=200,content=content,template=template,mimetype='text/html')
 
         def get_module_name(self):

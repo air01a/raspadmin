@@ -1,3 +1,5 @@
+<script src="/static/app/nzbget.js"></script>
+<div ng-controller="NzbgetCtrl" id="mainCtrl">
 #if (@error==1)
 	<form method="POST" id="stopserviceform"><input type="hidden" name="alphanum_token" value="@token"><input type="hidden" name="alphanum_action" value="startservice"><button type="submit" class="btn btn-danger">Start Service</button></form>
 #stop
@@ -54,22 +56,22 @@
 						</li>
                                                 <li class="bgreen">
                                                         <div class="pull-left"><i class="icon-tasks"></i></div>
-                                                        <div class="datas-text pull-right"><span class="bold">@status.RemainingSizeLoFormated</span> Remaining</div>
+                                                        <div class="datas-text pull-right"><span class="bold">{{status.RemainingSizeLoFormated}}</span> Remaining</div>
                                                         <div class="clearfix"></div>
                                                 </li>
                                                 <li class="blightblue">
                                                         <div class="pull-left"><i class="icon-bolt"></i></div>
-                                                        <div class="datas-text pull-right"><span class="bold">@status.DownloadRateFormated</span> Dwn rate</div>
+                                                        <div class="datas-text pull-right"><span class="bold">{{status.DownloadRateFormated}}</span> Dwn rate</div>
                                                         <div class="clearfix"></div>
                                                 </li>
                                                 <li class="bviolet">
                                                         <div class="pull-left"><i class="icon-save"></i></div>
-                                                        <div class="datas-text pull-right"><span class="bold">@status.DownloadedSizeLoFormated</span> Saved</div>
+                                                        <div class="datas-text pull-right"><span class="bold">{{status.DownloadedSizeLoFormated}}</span> Saved</div>
                                                         <div class="clearfix"></div>
                                                </li>
 	                                      <li class="borange">
                                                         <div class="pull-left"><i class="icon-bolt"></i></div>
-                                                        <div class="datas-text pull-right"><span class="bold">@status.AverageDownloadRateFormated</span> Avrg dnw rate</div>
+                                                        <div class="datas-text pull-right"><span class="bold">{{status.AverageDownloadRateFormated}}</span> Avrg dnw rate</div>
                                                         <div class="clearfix"></div>
                                                 </li><br />
                                                 <br />
@@ -111,7 +113,7 @@ function reload() {
 }
 
 $( document ).ready(function() {
-	window.setInterval(reload, 60000);
+	//window.setInterval(reload, 60000);
 });
 
 </script>
@@ -126,14 +128,12 @@ $( document ).ready(function() {
 				<th>Downloaded</th>
 				<th>Action</th>
 			</tr>
-#for @dwn in @listgroups:
-			<tr>
-				<td>@dwn.NZBNicename</td>
-				<td>@dwn.Health (critical=@dwn.CriticalHealth)</td>
-				<td><span style="color: green">@dwn.DownloadedFormated </span>/ <span style="color: red">@dwn.FileSizeLoFormated</td>
-				<td><button class="btn btn-danger" onClick="deletepackage('@dwn.LastID')">Delete</button></td>
+			<tr ng-repeat="dwn in listgroups">
+				<td>{{dwn.NZBNicename}}</td>
+				<td>{{dwn.Health}} (critical={{dwn.CriticalHealth}}</td>
+				<td><span style="color: green">{{dwn.DownloadedFormated}} </span>/ <span style="color: red">{{dwn.FileSizeLoFormated}}</td>
+				<td><button class="btn btn-danger" onClick="deletepackage('{{dwn.LastID}}')">Delete</button></td>
 			</tr>
-#end			
 			</table>
                  <div class="panel-body" style="margin: auto;text-align:center;">
 			<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#idadddownload">Add Download</button>
@@ -150,19 +150,17 @@ $( document ).ready(function() {
                                 <th>ProgressLabel</th>
 				<th>Progress</th>
                         </tr>
-#for @dwn in @postqueue:
-                        <tr>
-                                <td>@dwn.NZBName</td>
-                                <td>@dwn.ProgressLabel</td>
+                        <tr ng-repeat="dwn in postqueue">
+                                <td>{{dwn.NZBName}}</td>
+                                <td>{{dwn.ProgressLabel}}</td>
                                 <td width="50%">
 <div class="progress progress-striped">
-  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: @dwn.StageProgress%">
-    <span class="sr-only">@dwn.StageProgress % Complete</span>
+  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: {{dwn.StageProgress}}%">
+    <span class="sr-only">{{dwn.StageProgress}} % Complete</span>
   </div>
 </div>
 </td>
                         </tr>
-#end
                         </table>
 </div>
 
@@ -177,13 +175,12 @@ $( document ).ready(function() {
 				<th>Size</th>
                                 <th>Status</th>
                         </tr>
-#for @dwn in @history:
-                        <tr>
-                                <td>@dwn.NZBNicename</td>
-				<td>@dwn.FileSizeLoFormated</td>
-				<td><span style="color:#if (@dwn.status=="Success") green #else red #end">@dwn.status</span></td>
+                        <tr ng-repeat="dwn in history">
+                                <td>{{dwn.NZBNicename}}</td>
+				<td>{{dwn.FileSizeLoFormated}}</td>
+				<td><span style="color:{{dwn.color}}">{{dwn.status}}</span></td>
                         </tr>
-#end
                         </table>
 </div>
 <br />
+</div>

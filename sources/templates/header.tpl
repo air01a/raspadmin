@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="raspadmin">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<meta charset="utf-8">
@@ -13,7 +13,7 @@
 		<link href="/static/css/bootstrapstyle.css" rel="stylesheet">
                 <link href="/static/css/font-awesome.css" rel="stylesheet">
         <script src="/static/js/jquery-1.10.2.min.js"></script>
-
+		<script src="/static/js/angular.min.js"></script>
 		<!-- HTML5 Support for IE -->
 		<!--[if lt IE 9]>
 		<script src="/static/js/html5shim.js"></script>

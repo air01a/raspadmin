@@ -74,12 +74,16 @@ class NzbGet:
 			result[i]['FileSizeLoFormated']=self.get_format_size(result[i]['FileSizeMB']*1024*1024)
 			if result[i]['UnpackStatus']=="SUCCESS":
 				status="Success"
+				color="green"
 			else:
 				if result[i]['DeleteStatus']!='None':
 					status="Deleted"
+					color="orange"
 				else:
 					status="Failed"
-			result[i]['status']=status	
+					color="red"
+			result[i]['status']=status
+			result[i]['color']=color	
 			result[i]['DestDir']=result[i]['DestDir'].split('/')[-1]
 		
 		if len(result)>10:
