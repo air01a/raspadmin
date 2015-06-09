@@ -111,9 +111,10 @@ class WebManager(WebStructure.WebAbstract):
 				error=0
 		errorstr=self._nzbget.get_error_str(error)
 		token=sessionvars['posttoken']
-		content={'token':token,'status':status,'listgroups':listgroups,'error':error,'errorstr':errorstr,'action':action,'postqueue':postqueue,'history':history}
+		content={'token':token,'status':status,'listgroups':listgroups,'error':error,'errorstr':errorstr,'action':action,'postqueue':postqueue,'history':history, 'includefile':None}
 		if http_context.suburl=='getstatus':
 			return WebStructure.HttpContext(statuscode=200,template=None, content=json.dumps(content),mimetype='text/html')
+		content['includefile']='nzbget/headernzbget.tpl'
 		return WebStructure.HttpContext(statuscode=200,content=content,template=template,mimetype='text/html')
 
         def get_module_name(self):

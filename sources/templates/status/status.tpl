@@ -1,3 +1,5 @@
+<script src="/static/app/status.js"></script>
+<div ng-controller="StatusCtrl" id="mainCtrl">
 <br /><div class="panel panel-primary" style="width: 80%;margin: auto">
 		        <div class="panel-heading">
 			          <h3 class="panel-title">Information</h3>
@@ -10,37 +12,37 @@
                                         <ul class="today-datas" style="margin:auto;text-align: center">
                                                 <li class="bred">
                                                         <div class="pull-left"><i class="icon-fire"></i></div>
-                                                        <div class="datas-text pull-right"><span class="bold">@temperature</span> CPU Temp.</div>
+                                                        <div class="datas-text pull-right"><span class="bold">{{data.temperature}}</span> CPU Temp.</div>
                                                         <div class="clearfix"></div>
 						</li>
                                                 <li class="bgreen">
                                                         <div class="pull-left"><i class="icon-tasks"></i></div>
-                                                        <div class="datas-text pull-right"><span class="bold">@loadavg.la1</span> CPU Load</div>
+                                                        <div class="datas-text pull-right"><span class="bold">{{data.la1}}</span> CPU Load</div>
                                                         <div class="clearfix"></div>
                                                 </li>
                                                 <li class="blightblue">
                                                         <div class="pull-left"><i class="icon-bolt"></i></div>
-                                                        <div class="datas-text pull-right"><span class="bold">@cpufrequency</span> CPU Freq.</div>
+                                                        <div class="datas-text pull-right"><span class="bold">{{data.cpufrequency}}</span> CPU Freq.</div>
                                                         <div class="clearfix"></div>
                                                 </li>
                                                 <li class="bviolet">
                                                         <div class="pull-left"><i class="icon-save"></i></div>
-                                                        <div class="datas-text pull-right"><span class="bold">@memory.free</span> Free RAM</div>
+                                                        <div class="datas-text pull-right"><span class="bold">{{data.memory.free}}</span> Free RAM</div>
                                                         <div class="clearfix"></div>
                                                 </li>
                                                 <li class="borange">
                                                         <div class="pull-left"><i class="icon-hdd"></i></div>
-                                                        <div class="datas-text pull-right"><span class="bold">@freespace</span> Free Disk</div>
+                                                        <div class="datas-text pull-right"><span class="bold">{{data.freespace}}</span> Free Disk</div>
                                                         <div class="clearfix"></div>
                                                 </li><br />
 	                                         <li class="bwhile">
 	                                                <div class="pull-left"><i class="icon-hdd"></i></div>
-                                                        <div class="datas-text pull-right"><span class="bold">@hostname</span> Hostname</div>
+                                                        <div class="datas-text pull-right"><span class="bold">{{data.hostname}}</span> Hostname</div>
                                                         <div class="clearfix"></div>
                                                 </li>
 						<li class="bblack">
                                                         <div class="pull-left"><i class="icon-hdd"></i></div>
-                                                        <div class="datas-text pull-right"><span class="bold">@uptime</span> Uptime</div>
+                                                        <div class="datas-text pull-right"><span class="bold">{{data.uptime}}</span> Uptime</div>
                                                         <div class="clearfix"></div>
                                                 </li>
 						<li class="byellow">
@@ -97,7 +99,7 @@ function initHTTPGraphchart52()
 		.Set('chart.labels.ingraph.specific', ['@memory.used','@memory.free','@memory.buffers','@memory.cached'])
  
            RGraph.Effects.Pie.RoundRobin(chart52)
-
+	   HttpGraphPtr['mem']=chart52
 }
 HttpGraphId.push(initHTTPGraphchart52)
 
@@ -276,4 +278,4 @@ HttpGraphId.push(initHTTPGraphLoadAvg)
 </table>
 </div></div><br />
 
-
+</div>

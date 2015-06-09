@@ -18,7 +18,7 @@
 
 from .. import WebStructure 
 import status
-
+import json
 
 class WebManager(WebStructure.WebAbstract):
 	def __init__(self,webconf):
@@ -54,6 +54,8 @@ class WebManager(WebStructure.WebAbstract):
 		ip = status.getIP()
 		includefile='status/headerstatus.html'
 		content={'freespace':freespace,'cpufrequency':cpufrequency,'uptime':uptime,'loadavg':loadavg,'ip':ip,'hostname':hostname,'cpu':cpu,'numcpu':numcpu,'cpuusage':cpuusage,'disk':disk,'temperature':temperature,'memory':memory,'includefile':includefile}	
+		if http_context.suburl=='getinfo' :
+			return WebStructure.HttpContext(statuscode=200,content=json.dumps(content), template=None, mimetype='text/html')
 		return WebStructure.HttpContext(statuscode=200,content=content,template=template,mimetype='text/html')
 
         def get_module_name(self):
