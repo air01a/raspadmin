@@ -41,7 +41,7 @@ def getCpuPercent():
 
 
 def getNumCpu():
-	return psutil.NUM_CPUS
+	return psutil.cpu_count()
 
 def getCPUusage():
 	return psutil.cpu_percent(percpu=True)
