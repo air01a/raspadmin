@@ -98,14 +98,23 @@ done
 
 for mod in $module; do
 	echo "--- Installing module $mod"
-	cd $mod/conf
-	cp -Rf * /etc/raspadmin
-	cd ../sources
-	mkdir $moduledir/$mod
-	cp -Rf * $moduledir/$mod
-	cd ../templates
-	cp -Rf * $templatesdir
-	cd ../
+	cd $mod
+	if [ -d "conf" ] ; then
+		cd conf
+		cp -Rf * /etc/raspadmin
+		cd ..
+	fi
+	if [ -d "sources" ] ; then
+		cd sources
+		mkdir $moduledir/$mod
+		cp -Rf * $moduledir/$mod
+		cd ..
+	fi
+	if [ -d "templates" ] ; then
+		cd templates
+		cp -Rf * $templatesdir
+		cd ..
+	fi
 	if [ -d "static" ] ; then
 		cd static
 		cp -R * $installdir/static
