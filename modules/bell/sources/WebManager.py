@@ -33,6 +33,10 @@ class WebManager(WebStructure.WebAbstract):
 			call(['/usr/sbin/service','bell','stop'])
 			sleep(0.5)
 
+		if http_context.suburl=="TEST":
+			call(['/usr/bin/python','/opt/bell/send.py'])
+			sleep(1)
+		
 		if os.path.isfile("/tmp/BELLRESPONSE"):
 			isFile=True
 		else:

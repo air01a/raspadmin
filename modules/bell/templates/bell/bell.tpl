@@ -15,3 +15,10 @@ Service is Not Running <br />
 #else
 	No File detected, no signal received.
 #end
+<br />
+<br />
+#if (@isOpen)
+<a href="/bell/TEST">
+<button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">Test</button>
+</a>
+#end
