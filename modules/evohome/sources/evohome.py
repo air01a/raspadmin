@@ -12,11 +12,11 @@ class EvoHome:
 		self.password=config.get("EVOHOME", "password")
 		self.dbname=config.get("EVOHOME","dbname")
 		
-		self.ec = EvohomeClient(self.login, self.password)
 		
 	def getCurrentValues(self):
+		ec = EvohomeClient(self.login, self.password)
 		temperatures=[]
-		for device in self.ec.temperatures():
+		for device in ec.temperatures():
 			temperatures.append({'name':device['name'],'temperature':device['temp']})
 		return temperatures
 	

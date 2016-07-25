@@ -13,12 +13,25 @@
 </div>
 <script src="/static/js/chart/Chart.js"></script>
 <script>
-function getRandomColor() {
-    var letters = '0123456789ABCDEF'.split('');
-    var color = '#';
-    for (var i = 0; i < 6; i++ ) {
-        color += letters[Math.floor(Math.random() * 16)];
+colors={};
+colorsList=["#DC143C","#00008B","#006400","#8B008B","#483D8B","#FFD700","#00FFFF","#FF7F50","#ADFF2F","#663399","#778899"];
+
+function getRandomColor(data) {
+    if (data in colors)
+	return colors[data];
+
+    if (colorsList.length>0) {
+		color = colorsList[0];
+		colorsList.splice(0,1);
+    } else {
+
+	    var letters = '0123456789ABCDEF'.split('');
+   	    var color = '#';
+    	    for (var i = 0; i < 6; i++ ) {
+        	color += letters[Math.floor(Math.random() * 16)];
+    	    }
     }
+    colors[data]=color;
     return color;
 }
 var ctx = document.getElementById("myChart");
@@ -32,10 +45,10 @@ var data = {
             label: "@data",
             fill: false,
             lineTension: 0.1,
-            borderColor: getRandomColor(),
-            pointHoverBackgroundColor: "rgba(75,192,192,1)",
-            pointHoverBorderColor: "rgba(220,220,220,1)",
-            pointBorderColor: "rgba(75,192,192,1)",
+            borderColor: getRandomColor("@data"),
+            pointHoverBackgroundColor: getRandomColor("@data"),
+            pointHoverBorderColor: getRandomColor("@data"),
+            pointBorderColor: getRandomColor("@data"),
             borderCapStyle: 'butt',
             borderDash: [],
             borderDashOffset: 0.0,
