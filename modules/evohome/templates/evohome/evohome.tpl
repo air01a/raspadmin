@@ -8,8 +8,8 @@
 		</div>
 </div>
 #end
-<div style="width:800px;height:400px">
-<canvas id="myChart" width="800" height="400"></canvas>
+<div style="width:100%;height:40%">
+<canvas id="myChart" width="100%" height="40%"></canvas>
 </div>
 <script src="/static/js/chart/Chart.js"></script>
 <script>

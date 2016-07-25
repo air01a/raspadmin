@@ -17,7 +17,7 @@
 						</li>
                                                 <li class="bgreen">
                                                         <div class="pull-left"><i class="icon-tasks"></i></div>
-                                                        <div class="datas-text pull-right"><span class="bold">{{data.la1}}</span> CPU Load</div>
+                                                        <div class="datas-text pull-right"><span class="bold">{{data.loadavg.la1}}</span> CPU Load</div>
                                                         <div class="clearfix"></div>
                                                 </li>
                                                 <li class="blightblue">
