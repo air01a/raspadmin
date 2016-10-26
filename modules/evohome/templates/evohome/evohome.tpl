@@ -1,3 +1,20 @@
+#if (@weather!="None")
+<div class="panel panel-info" style="width: 80%;margin: auto">
+                        <div class="panel-heading">
+                                  <h3 class="panel-title">Weather</h3>
+                        </div>
+			<div class="panel-body" style="margin: auto;text-align:center;">
+				<table class="table" style="border:0px">
+                        		<tr><td><img src="@weather.icon"></td><td>@weather.status</td></tr>
+					<tr><td>Temp : @weather.temperature C</td><td>Wind: @weather.wind.speed (@weather.wind.deg deg)</td></tr>
+					<tr><td>Humidity : @weather.humidity</td><td>Pressure : @weather.pressure.press</td></tr>
+					<tr><td>Sunrise : @weather.sunrise</td><td>Sunset : @weather.sunset</td></tr>
+				</table>
+			</div>
+</div>
+<br />
+<br />
+#end
 #for @temperature in @temperatures:
 <div class="panel panel-primary" style="width: 20%;margin-left: 10px;margin-right: 10px; float:left">
 		        <div class="panel-heading">

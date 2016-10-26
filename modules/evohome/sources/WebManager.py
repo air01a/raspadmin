@@ -36,9 +36,9 @@ class WebManager(WebStructure.WebAbstract):
                 sessionid=http_context.sessionid
                 sessionvars=http_context.session.get_vars(sessionid)
 		
-		temperatures=self.evohome.getCurrentValues()
+		(temperatures,weather)=self.evohome.getCurrentValues()
 		history=self.format_data(self.evohome.getHistory())
-		return WebStructure.HttpContext(statuscode=200,content={'token':sessionvars['posttoken'],'history':history,'temperatures':temperatures},template=template,mimetype='text/html')
+		return WebStructure.HttpContext(statuscode=200,content={'token':sessionvars['posttoken'],'history':history,'weather':weather,'temperatures':temperatures},template=template,mimetype='text/html')
 		
 
         def get_module_name(self):
