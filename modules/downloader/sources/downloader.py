@@ -11,6 +11,7 @@ class Downloader(Thread):
 		Thread.__init__(self)
 		self.next = False
 		self.aToDownload = aToDownload
+		self.bandwidth = 0
 
 	def fileToDownload(self):
 		for i in xrange(0,len(self.aToDownload)):
@@ -36,12 +37,17 @@ class Downloader(Thread):
             					total_length = int(total_length)
 						self.aToDownload[self.next]['length']=total_length
 						dl = 0
+						self.bandwidth = 0
+						timer = time.time()
+						
 						for data in response.iter_content(chunk_size=4096):
 							dl += len(data)
 							f.write(data)
 							self.aToDownload[self.next]['progression']=dl
+							self.bandwidth = dl /(time.time()-timer)
 						f.close()
 						self.aToDownload[self.next]['state']='f'
+						self.bandwidth = 0
 		except:
 			self.aToDownload[self.next]['state']='E'
 					
@@ -85,6 +91,8 @@ class DownloadManager():
 				i['percent'] = 0
 			i['progression'] = self.get_format_size(i['progression'])
 			i['length'] = self.get_format_size(i['length'])
+			if i['state'] == 'd':
+				i['bandwidth'] = self.get_format_size(self.thread.bandwidth) + '/s'
 			ret.append(i)
 			
 		return ret

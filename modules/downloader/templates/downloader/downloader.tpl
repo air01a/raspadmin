@@ -39,7 +39,7 @@
 					<tr>
 					  	<td>{{dwn.filename}}</td>
                         	        	<td>{{dwn.state}}</td>
-                        	        	<td><span style="color: green">{{dwn.progression}} </span>/ <span style="color: red">{{dwn.length}}
+                        	        	<td><span style="color: green">{{dwn.progression}} </span>/ <span style="color: red">{{dwn.length}} <span style="color: green">({{dwn.bandwidth}})</span>
 							<div class="progress progress-striped" ng-if="dwn.state=='d'">
 								<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: {{dwn.percent}}%">
     									<span class="sr-only">{{dwn.percent}} % Complete</span>
@@ -68,7 +68,9 @@
                         <tbody ng-repeat="dwn in result | filter : historyFilter">
                         	<tr>	
 			        	<td>{{dwn.filename}}</td>
-                               		 <td>{{dwn.state}} </td>
+                               		 <td> <span style="color: red" ng-if="dwn.state=='e'">Failed</span>
+					      <span style="color: green" ng-if="dwn.state!='e'">Ok</span>
+					 </td>
                                 	<td>{{dwn.progression}} </span>/ <span style="color: red">{{dwn.length}}</td>
 				</tr>
 				<tr>
