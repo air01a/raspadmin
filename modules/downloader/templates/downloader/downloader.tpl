@@ -64,6 +64,7 @@
 				<th style="text-align: center">Name</th>
                                 <th  style="text-align: center">State</th>
                                 <th  style="text-align: center">Size</th>
+				<th style="text-align: center">Op</th>
                         </tr>
                         <tbody ng-repeat="dwn in result | filter : historyFilter">
                         	<tr>	
@@ -72,9 +73,15 @@
 					      <span style="color: green" ng-if="dwn.state!='e'">Ok</span>
 					 </td>
                                 	<td>{{dwn.progression}} </span>/ <span style="color: red">{{dwn.length}}</td>
+					<td> <span style="color: red" ng-if="dwn.rar=='t'">
+							<span style="color:red" ng-if="dwn.state=='r'">In progress</span>
+							<span style="color:red" ng-if="dwn.state!='r'">
+								<a href="/downloader/unrar?str_file={{dwn.filename}}">Unrar({{dwn.state}})</a>
+							</span>
+					      </span>
 				</tr>
 				<tr>
-					<td colspan="3" style="text-align: right; color:#E6E6E6">{{dwn.url}}</td>
+					<td colspan="4" style="text-align: right; color:#E6E6E6">{{dwn.url}}</td>
                         	</tr>
 			</tbody>
                         </table>

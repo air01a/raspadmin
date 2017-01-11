@@ -4,6 +4,7 @@ import time
 import threading
 progress=[]
 import sys
+import urllib
 
 class Downloader(Thread):
 
@@ -47,7 +48,11 @@ class Downloader(Thread):
 							self.bandwidth = dl /(time.time()-timer)
 						f.close()
 						self.aToDownload[self.next]['state']='f'
+						if file_name[-4:].lower() == '.rar':
+							self.aToDownload[self.next]['rar']='t'
+
 						self.bandwidth = 0
+				
 		except:
 			self.aToDownload[self.next]['state']='E'
 					
@@ -71,14 +76,22 @@ class DownloadManager():
 
 	def addDownload(self, url):
 		try:
-			file_name = url[url.rfind('/') + 1:]
+			file_name = urllib.unquote(url[url.rfind('/') + 1:])
 		except:
-			self.aToDownload.append({'url':url,'path':'Error','filename':'error','state':'E','progression':0,'length':0,'id':-1})
+			self.aToDownload.append({'url':url,'path':'Error','filename':'error','state':'E','progression':0,'length':0,'id':-1,'rar':'f'})
 			return
 		self.aToDownload.append({'url':url,'path':self.path+'/'+file_name,'filename':file_name,'state':'w','progression':0,'length':0,'id':-1})
 		if not self.thread.isAlive():
 			self.thread = Downloader(self.aToDownload)
 			self.thread.start()
+
+	def updateStatus(self, filename, status):
+		for line in self.aToDownload:
+			if line["filename"]==filename:
+				line["state"]=status
+				return True
+		return False
+		
 
 	def downloadStatus(self):
 		ret = []
