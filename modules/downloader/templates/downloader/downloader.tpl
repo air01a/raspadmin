@@ -76,7 +76,7 @@
 					<td> <span style="color: red" ng-if="dwn.rar=='t'">
 							<span style="color:red" ng-if="dwn.state=='r'">In progress</span>
 							<span style="color:red" ng-if="dwn.state!='r'">
-								<a href="/downloader/unrar?str_file={{dwn.filename}}">Unrar({{dwn.state}})</a>
+								<a ng-click="unrar(dwn.filename)">Unrar({{dwn.state}})</a>
 							</span>
 					      </span>
 				</tr>

@@ -27,6 +27,13 @@ angular.module('raspadmin', [])
     			}, 10000)
   		};
 
+		$scope.unrar = function(filename) {
+			$http.get('/downloader/unrar?str_file='+filename)
+				.success(function(res) {
+					$scope.getInfo();
+				});
+		};
+
 		$scope.getInfo();
 		$scope.intervalFunction();
 	});
