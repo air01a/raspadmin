@@ -74,7 +74,7 @@ serial=12345678
 model_number=1
 
 # Automatic discovery of new files in the media_dir directory.
-#inotify=yes
+inotify=yes
 
 # List of file names to look for when searching for album art. Names should be
 # delimited with a forward slash ("/").
