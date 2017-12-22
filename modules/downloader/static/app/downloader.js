@@ -14,7 +14,7 @@ angular.module('raspadmin', [])
 		};
 	
                 $scope.historyFilter = function (item) {
-                         if (item.state === 'f' || item.state === 'e' || item.state === 'r' || item.state === 'dr' || item.state==='df') {
+                         if (item.state === 'f' || item.state === 'E' || item.state === 'r' || item.state === 'dr' || item.state==='df') {
                                 return item;
                          }
                 };

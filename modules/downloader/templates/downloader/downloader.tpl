@@ -69,8 +69,8 @@
                         <tbody ng-repeat="dwn in result | filter : historyFilter">
                         	<tr>	
 			        	<td>{{dwn.filename}}</td>
-                               		 <td> <span style="color: red" ng-if="dwn.state=='e'">Failed</span>
-					      <span style="color: green" ng-if="dwn.state!='e'">Ok</span>
+                               		 <td> <span style="color: red" ng-if="dwn.state=='E'">Failed</span>
+					      <span style="color: green" ng-if="dwn.state!='E'">Ok</span>
 					 </td>
                                 	<td>{{dwn.progression}} </span>/ <span style="color: red">{{dwn.length}}</td>
 					<td> <span style="color: red" ng-if="dwn.rar=='t'">

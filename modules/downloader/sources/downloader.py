@@ -23,24 +23,25 @@ class Downloader(Thread):
 		return False
 
 	def run(self):
-		try:
-			while self.fileToDownload()!=False:
-				url=self.aToDownload[self.next]['url']
+		while self.fileToDownload()!=False:
+			url=self.aToDownload[self.next]['url']
+			try:
 				self.aToDownload[self.next]['id']=self.next
 				file_name = self.aToDownload[self.next]['path']
 				self.aToDownload[self.next]['state']='d'
 				with open(file_name, "wb+") as f:
 					response = requests.get(url, stream=True)
 					total_length = response.headers.get('content-length')
-					if total_length is None:
+					if response.status_code!=200 or total_length is None:
 						f.write(response.content)
+						self.aToDownload[self.next]['state']='E'
 					else:
             					total_length = int(total_length)
 						self.aToDownload[self.next]['length']=total_length
 						dl = 0
 						self.bandwidth = 0
 						timer = time.time()
-						
+					
 						for data in response.iter_content(chunk_size=4096):
 							dl += len(data)
 							f.write(data)
@@ -50,11 +51,10 @@ class Downloader(Thread):
 						self.aToDownload[self.next]['state']='f'
 						if file_name[-4:].lower() == '.rar':
 							self.aToDownload[self.next]['rar']='t'
-
 						self.bandwidth = 0
 				
-		except:
-			self.aToDownload[self.next]['state']='E'
+			except:
+				self.aToDownload[self.next]['state']='E'
 					
 						
 class DownloadManager():
