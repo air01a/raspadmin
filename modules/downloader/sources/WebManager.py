@@ -4,6 +4,7 @@ from downloader import DownloadManager
 import json
 import rarfile
 from threading import Thread
+from alldebrid import AllDebrid
 
 class WebManager(WebStructure.WebAbstract):
 	def __init__(self,webconf):
@@ -11,13 +12,33 @@ class WebManager(WebStructure.WebAbstract):
 		config = ConfigParser.ConfigParser()
                 config.readfp(open('/etc/raspadmin/downloader.conf'))
 		self.path=config.get("PATH","downloadrep")
+		self.alldebrid=0
+		try:
+			if config.get("ALLDEBRID","usealldebrid").upper()=="Y":
+				self.alldebriduser=config.get("ALLDEBRID","alldebriduser")
+				self.alldebridpass=config.get("ALLDEBRID","alldebridpass")
+				self.alldebrid=AllDebrid(self.alldebriduser,self.alldebridpass)
+		except:
+			self.alldebrid=None
+				
 		self.downloadManager = DownloadManager(self.path)
 		rarfile.UNRAR_TOOL = "unrar-nonfree"
 
 	def manage_download(self,str_list):
 		list_download = [y for y in (x.strip() for x in str_list.splitlines()) if y]
 		for url in list_download:
+			size=0
+			if self.alldebrid!=None:
+				if self.alldebrid.isProvider(url):
+					url2 = url
+					(error,url) = self.alldebrid.getLink(url)
+					if error!=0:
+						url=url2
+					else:
+						print error
+			#  https://github.com/usineur/go-debrid/blob/master/alldebrid/debrid.go
 			self.downloadManager.addDownload(url)
+			
 
 	def unrar(self,file):
 		if self.downloadManager.updateStatus(file,'r'):
