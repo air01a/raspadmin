@@ -165,7 +165,7 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
 
 	
 	# Create the http context to send to the module
-        http_context=HttpContext(http_get=http_get,http_post=http_post,url=url,suburl=suburl,ipclient=ipclient, cookies=http_cookies, sessionid=sessionid, session=sessionmanager, module=module,servername=self.headers.get('Host'), module_manager=moduleManager)
+        http_context=HttpContext(http_get=http_get,http_post=http_post,url=url,suburl=suburl,ipclient=ipclient, cookies=http_cookies, sessionid=sessionid, session=sessionmanager, module=module,servername=self.headers.get('Host'), module_manager=moduleManager, directhttp=self)
 
 	# Check if there is required module to go through
 	for requiredmodule in moduleManager.getrequiredmodules():
@@ -183,7 +183,6 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
 	# Send the module
 	# Pass the response to the renderer function
 	try:
-		
 		http_response=moduleManager.getmodule(module).get_html(http_context)
 
 	except Exception, e:

@@ -12,11 +12,6 @@ function webservice(action,value) {
 </a>
 <script>
 
-function loadImage(){
-	result=$.get("/picam/getimage",function(data){
-                $('#capture').attr('src',"data:image/jpg;base64," + data.image);
-        },"json");
-}
 
 function webservice(action,value) {
 	$.post( "/picam/ws", { "alphanum_token": "@token","alphanum_action":action,'str_value':value }, function( data ) {
@@ -27,11 +22,6 @@ function webservice(action,value) {
 		}
 	});
 }
-
-$(document).ready(function() {
-	loadImage()
-	window.setInterval(loadImage, 1000);
-});
 </script>
 #end
 
@@ -43,7 +33,11 @@ $(document).ready(function() {
                                   <h3 class="panel-title">PiCamera</h3>
                         </div>
                  <div class="panel-body" style="margin: auto;text-align:center;">
+#if (@isActive==0)
 			<div style="margin: auto"><img style="max-width: 80%" src="/static/images/nocapture.png" id="capture"></div>
+#else
+			<div style="margin: auto"><img style="max-width: 80%" src="/picam/getimage.mjpg" id="capture"></div>
+#end
 			<br />
 			<button type="button" class="btn btn-success btn-lg" data-dismiss="modal" onclick="webservice('light_inc','')">Bri +</button>
 			<button type="button" class="btn btn-success btn-lg" data-dismiss="modal" onclick="webservice('light_dec','')">Bri -</button>
