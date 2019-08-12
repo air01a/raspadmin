@@ -15,9 +15,9 @@ class WebManager(WebStructure.WebAbstract):
 		self.alldebrid=0
 		try:
 			if config.get("ALLDEBRID","usealldebrid").upper()=="Y":
-				self.alldebriduser=config.get("ALLDEBRID","alldebriduser")
-				self.alldebridpass=config.get("ALLDEBRID","alldebridpass")
-				self.alldebrid=AllDebrid(self.alldebriduser,self.alldebridpass)
+				self.alldebridtoken=config.get("ALLDEBRID","alldebridtoken")
+				self.alldebridagent=config.get("ALLDEBRID","alldebridagent")
+				self.alldebrid=AllDebrid(self.alldebridtoken,self.alldebridagent)
 		except:
 			self.alldebrid=None
 				

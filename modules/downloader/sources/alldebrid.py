@@ -2,11 +2,13 @@ import requests
 import json
 
 class AllDebrid:
-	def __init__(self, login, password):
-		self.login = login
-		self.password = password
-		self._getProvider()		
-		self._authenticate()
+	def __init__(self, token,agent):
+		self._getProvider()
+		self._token=token
+		self._agent=agent
+		self.headers = {
+                        	'User-Agent': 'raspadmin_v1'
+                	}
 
 	def _getProvider(self):
              	try:
@@ -28,26 +30,16 @@ class AllDebrid:
 
 		return False
 
-	def _authenticate(self):
-		url = "https://api.alldebrid.com/user/login?username=%s&password=%s" % (self.login,self.password)
-		req = requests.get(url)
-		data = json.loads(req.content)
-		if 'success' in data.keys():
-			self._token = data['token']
-			return 0
-		else:
-			self._token=None
-			return 1
-	
+
 	def getLink(self,url):
-		req = requests.get("https://api.alldebrid.com/link/unlock?token=%s&link=%s" % (self._token,url))
+		req = requests.get("https://api.alldebrid.com/link/unlock?agent=%s&token=%s&link=%s" % (self._agent,self._token,url),headers=self.headers)
 		data = json.loads(req.content)
-		
+
 		if "error" in data.keys():
-			if data["errorCode"]==1:
-				self._authenticate()
-				return self.getLink(url)
+			if data["errorCode"]!=0:
+				print(data)
+				print(data["errorCode"])
 			return (data["error"],"")
 		else:
 			return (0,data["infos"]["link"])
-		
+
