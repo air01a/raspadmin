@@ -1,6 +1,10 @@
 raspadmin
 =========
 
+--- WARNING
+Deprecated. See raspadmin v3, which is compatible with python v3. 
+-----------
+
 Web interface for raspberry administration
 
 This web interface is written fully in python, you do not need to install another web server (like apache or lighttpd).
